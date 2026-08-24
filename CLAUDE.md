@@ -58,10 +58,14 @@ system is meant to look.
    structured one in `learn-data.js` (`scoringDescriptions`) and the
    signed-off one inside each evidence entry. Don't hard-code band names in
    a page.
-7. **The score ramp is switchable.** `styles.css` ships a sequential blue
-   ramp. Adding `data-ramp="traffic"` to `<html>` restores the earlier
-   red/amber/green treatment across the whole site. Both are defined in the
-   "Score marks and the colour ramp" section.
+7. **The score ramp is switchable.** The default is the BZE briefing-sheet
+   palette, with 1 and 2 swapped so the worst score is the loudest. Two
+   alternates are defined in the "Score marks and the colour ramp" section
+   and are selected from the `<html>` tag:
+   `data-ramp="sequential"` (one-hue blue sweep) or `data-ramp="traffic"`
+   (red / amber / green). Each score carries an `--sN-ink` alongside its
+   `--sN`, so a mark never has to guess which fills are light — change a
+   colour and its ink travels with it.
 8. Australian English in all copy (organise, prioritise, colour).
 
 ## The review loop
