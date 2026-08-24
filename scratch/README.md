@@ -1,5 +1,9 @@
 # Scratchpad
 
+`nap-concept-a-report.html` is the winner of the August 2026 round and is kept
+as the reference for how the ported design system is meant to look. It is not
+a live concept — don't edit it to change the site; edit `styles.css`.
+
 Throwaway design concepts. Served at <http://localhost:5173/scratch/> when the dev
 server is running, but **never linked from the site** — the real pages don't
 reference anything in here.
@@ -11,7 +15,7 @@ reference anything in here.
 2. Browse them at `/scratch/`. Tick two and hit **Compare side by side**.
 3. Comment on the one you like with the review overlay, same as any page —
    comments get tagged `scratch/…` so it's obvious they're about a concept.
-4. When one wins: *"port scratch/home-editorial.html into index.html"*.
+4. When one wins: *"port scratch/<concept>.html into the real pages"*.
 5. Delete concepts whenever. Nothing depends on them.
 
 ## Writing a concept by hand
