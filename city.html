@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Region – National Action Plan</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div id="napCrumbs"></div>
+
+    <div class="hero tight">
+      <div class="eyebrow" id="eyebrow"></div>
+      <h1 id="regionTitle">Region</h1>
+
+      <div class="regionIntro" id="regionIntro">
+        <div class="regionProse" id="regionLede"></div>
+
+        <!-- Shown only if regions/<key>.jpg or .png exists. See
+             region-overview.js for the naming convention. -->
+        <figure class="regionFigure" id="regionFigure" hidden>
+          <img id="regionPhoto" alt="" />
+          <figcaption id="regionPhotoCap"></figcaption>
+        </figure>
+      </div>
+
+    </div>
+
+    <div class="band" id="overviewBand" hidden>
+      <div class="secHead">
+        <h2>Regional overview</h2>
+        <div class="secNote">Context for the region. The scores and the evidence
+          behind them are below.</div>
+      </div>
+      <div id="overviewBody"></div>
+    </div>
+
+    <div class="band">
+      <div class="secHead">
+        <h2>Indicator scores</h2>
+        <div class="secNote">Click an indicator for its grading scale and the
+          evidence behind the score.</div>
+      </div>
+
+      <div class="roundBar" id="roundBar" style="display:none">
+        <label for="roundSelect">Assessment</label>
+        <select class="select" id="roundSelect"></select>
+        <span class="roundSummary" id="roundSummary"></span>
+        <span class="pushRight"></span>
+        <span class="toggle" id="filterToggle">
+          <button type="button" data-filter="all" aria-pressed="false">All</button>
+          <button type="button" data-filter="scored" aria-pressed="true">Scored only</button>
+        </span>
+      </div>
+
+      <div id="legendHost"></div>
+      <div id="themes"></div>
+    </div>
+  </div>
+
+  <script src="regions.js"></script>
+  <script src="data.js"></script>
+  <script src="scores.js"></script>
+  <script src="learn-data.js"></script>
+  <script src="region-overview.js"></script>
+  <script src="nap.js"></script>
+  <script src="indicator-drawer.js"></script>
+  <script>
+    const regionKey = NAP.qs("city");
+    const region    = regionByKey(regionKey);
+    const rName     = regionName(regionKey);
+    const rounds    = NAP.roundsFor(regionKey);
+
+    document.title = `${rName} – National Action Plan`;
+    document.getElementById("regionTitle").textContent = rName;
+    document.getElementById("eyebrow").textContent =
+      region ? `${region.state} · ${rounds.length ? "Assessed" : "Not yet assessed"}` : "";
+
+    NAP.shell({
+      page: "region",
+      crumbs: [["Overview", "index.html"], ["Regions", "map.html"], rName],
+    });
+
+    // ── state ───────────────────────────────────────────────────────────────
+    let roundIdx = rounds.length ? 0 : -1;
+
+    // "Scored only" is the default. A round in progress has more unscored
+    // indicators than scored ones, and the empty rows bury the assessment.
+    // The toggle is still there to see the whole criteria structure.
+    let filter = "scored";
+
+    const selectEl  = document.getElementById("roundSelect");
+    const barEl     = document.getElementById("roundBar");
+    const summaryEl = document.getElementById("roundSummary");
+    const themesEl  = document.getElementById("themes");
+    const ledeEl    = document.getElementById("regionLede");
+
+    const overview  = typeof regionOverview === "function" ? regionOverview(regionKey) : null;
+
+    if (rounds.length) {
+      barEl.style.display = "flex";
+      rounds.forEach((r, i) => {
+        const o = document.createElement("option");
+        o.value = i;
+        o.textContent = r.date + (i === 0 ? " (latest)" : "");
+        selectEl.appendChild(o);
+      });
+      const bare = document.createElement("option");
+      bare.value = "-1";
+      bare.textContent = "— no assessment —";
+      selectEl.appendChild(bare);
+      selectEl.value = "0";
+      selectEl.addEventListener("change", () => {
+        roundIdx = +selectEl.value;
+        renderAll();
+      });
+    }
+
+    document.getElementById("filterToggle").addEventListener("click", e => {
+      const btn = e.target.closest("button[data-filter]");
+      if (!btn) return;
+      filter = btn.dataset.filter;
+      renderThemes();   // calls syncToggle with the filter actually applied
+    });
+
+    function currentScores() {
+      return roundIdx >= 0 && rounds[roundIdx] ? rounds[roundIdx].scores : {};
+    }
+
+    // Reflect the filter actually in force, and grey the toggle out when
+    // there is nothing scored to filter down to.
+    function syncToggle(active, enabled) {
+      document.querySelectorAll("#filterToggle button").forEach(b => {
+        b.setAttribute("aria-pressed", String(b.dataset.filter === active));
+        b.disabled = !enabled;
+      });
+    }
+
+    // ── region overview ─────────────────────────────────────────────────────
+    // Static per region, so this runs once rather than on every round change.
+    function renderOverview() {
+      if (!overview) return;
+
+      ledeEl.innerHTML = (overview.intro || [])
+        .map(p => `<p>${NAP.esc(p)}</p>`).join("");
+
+      // Try regions/<key>.jpg, then .png, then give up and leave the figure
+      // hidden. This is how a photo can be added by dropping in a file.
+      const fig = document.getElementById("regionFigure");
+      const img = document.getElementById("regionPhoto");
+      const exts = ["jpg", "png"];
+      let attempt = 0;
+      img.addEventListener("error", () => {
+        attempt += 1;
+        if (attempt < exts.length) img.src = `regions/${regionKey}.${exts[attempt]}`;
+      });
+      img.addEventListener("load", () => {
+        fig.hidden = false;
+        img.alt = rName;
+        document.getElementById("regionIntro").classList.add("hasPhoto");
+      });
+      img.src = `regions/${regionKey}.${exts[0]}`;
+
+      const cap = document.getElementById("regionPhotoCap");
+      if (overview.photoCaption) cap.textContent = overview.photoCaption;
+      else cap.remove();
+
+      const glance = (overview.glance || []).map(g =>
+        `<div class="glanceCard">` +
+          `<div class="glanceTitle">${NAP.esc(g.title)}</div>` +
+          `<ul class="glanceList">` +
+            g.items.map(i => `<li>${NAP.esc(i)}</li>`).join("") +
+          `</ul>` +
+        `</div>`
+      ).join("");
+
+      const sections = (overview.sections || []).map(s =>
+        `<section class="ovSection">` +
+          `<h3>${NAP.esc(s.title)}</h3>` +
+          s.paragraphs.map(p => `<p>${NAP.esc(p)}</p>`).join("") +
+        `</section>`
+      ).join("");
+
+      if (!glance && !sections) return;
+      document.getElementById("overviewBody").innerHTML =
+        (glance ? `<div class="glanceGrid">${glance}</div>` : "") + sections;
+      document.getElementById("overviewBand").hidden = false;
+    }
+
+    renderOverview();
+
+    // ── lede and summary ────────────────────────────────────────────────────
+    function renderHead() {
+      const scores = currentScores();
+      const n = Object.keys(scores).length;
+      const total = NAP.allItems().length;
+      const round = roundIdx >= 0 ? rounds[roundIdx] : null;
+
+      // With an overview, that prose is the whole hero. Without one there
+      // would be nothing under the region name, so the coverage sentence
+      // stays there as it always has. Either way the round selector below
+      // carries the mean and the coverage count.
+      if (!overview) {
+        if (!rounds.length) {
+          ledeEl.innerHTML = `${NAP.esc(rName)} is one of the 16 industrial regions `
+            + `in scope. No assessment round has been recorded yet, so the criteria `
+            + `below are unscored.`;
+        } else if (round) {
+          ledeEl.innerHTML = `${n} of ${total} indicators were scored in the `
+            + `<strong>${NAP.esc(round.date)}</strong> round.`;
+        } else {
+          ledeEl.innerHTML = `Showing the criteria structure with no assessment applied.`;
+        }
+      }
+
+      // summary beside the selector
+      if (!round) {
+        summaryEl.textContent = "";
+      } else if (!n) {
+        summaryEl.textContent = "No indicators scored in this round";
+      } else {
+        const m = NAP.mean(scores, 5);
+        const cov = `${n} of ${total} indicators scored`;
+        if (m === null) {
+          summaryEl.textContent = cov;
+          summaryEl.title = "Too few indicators scored in this round to report a mean.";
+        } else {
+          summaryEl.innerHTML = `Mean <strong>${m.toFixed(1)}</strong> · ${cov}`;
+          summaryEl.title = "Mean is the average across scored indicators only; "
+            + "unscored indicators are excluded.";
+        }
+      }
+
+      document.getElementById("legendHost").innerHTML = round ? NAP.legend() : "";
+    }
+
+    // ── the accordion ───────────────────────────────────────────────────────
+    function renderThemes() {
+      const scores = currentScores();
+      const open = new Set(
+        [...themesEl.querySelectorAll('.pBtn[aria-expanded="true"]')].map(b => b.dataset.pillar)
+      );
+
+      // With nothing scored — an unassessed region, or "— no assessment —"
+      // chosen — "Scored only" would leave the page blank, so fall back to
+      // the full structure rather than showing an empty page.
+      const anyScored = Object.values(scores).some(v => typeof v === "number");
+      const view = (filter === "scored" && anyScored) ? "scored" : "all";
+      syncToggle(view, anyScored);
+
+      // First load: open every theme that has at least one score.
+      const firstRun = !themesEl.children.length;
+
+      themesEl.innerHTML = CSC.map((p, pi) => {
+        const s = NAP.themeSummary(scores, p.pillarId);
+        const isOpen = firstRun ? s.n > 0 : open.has(p.pillarId);
+
+        const groups = p.groups.map(g => {
+          const rows = g.items
+            .filter(it => view === "all" || typeof scores[it.id] === "number")
+            .map(it => {
+              const v = scores[it.id];
+              return `<a class="iRow" id="${NAP.esc(it.id)}" href="#${NAP.esc(it.id)}"` +
+                ` data-id="${NAP.esc(it.id)}">` +
+                `<span class="iName">${NAP.esc(it.title)}</span>` +
+                `<span class="iScore">` +
+                  `<span class="sWord">${typeof v === "number" ? NAP.esc(NAP.word(v)) : ""}</span>` +
+                  NAP.sBox(v) +
+                `</span></a>`;
+            }).join("");
+          if (!rows) return "";
+          return `<div class="grp"><div class="grpName">${NAP.esc(g.groupTitle)}</div>${rows}</div>`;
+        }).join("");
+
+        if (!groups) return "";
+
+        return `<section class="pillar">` +
+          `<button class="pBtn" type="button" data-pillar="${NAP.esc(p.pillarId)}"` +
+            ` aria-expanded="${isOpen}">` +
+            `<span class="pIdx">${String(pi + 1).padStart(2, "0")}</span>` +
+            `<span class="pName">${NAP.esc(p.pillarTitle)}</span>` +
+            `<span class="pCount">${p.groups.length} groups · ${s.total} indicators` +
+              (s.n ? ` · <strong>${s.n} scored</strong>` : "") + `</span>` +
+            `<span class="pCar"></span>` +
+          `</button>` +
+          `<div class="pBody${isOpen ? " open" : ""}">${groups}</div>` +
+        `</section>`;
+      }).join("");
+
+      themesEl.querySelectorAll(".pBtn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const on = btn.getAttribute("aria-expanded") === "true";
+          btn.setAttribute("aria-expanded", String(!on));
+          btn.nextElementSibling.classList.toggle("open", !on);
+        });
+      });
+
+      themesEl.querySelectorAll(".iRow").forEach(row => {
+        row.addEventListener("click", e => {
+          e.preventDefault();
+          DRAWER.open(row.dataset.id, regionKey);
+        });
+      });
+    }
+
+    function renderAll() {
+      renderHead();
+      renderThemes();
+    }
+
+    renderAll();
+
+    // Deep link: city.html?city=kwinana#energy-storage opens the drawer.
+    if (location.hash.length > 1) {
+      const id = decodeURIComponent(location.hash.slice(1));
+      if (NAP.itemById(id)) {
+        const row = document.getElementById(id);
+        const holder = row && row.closest(".pBody");
+        if (holder && !holder.classList.contains("open")) {
+          holder.classList.add("open");
+          holder.previousElementSibling.setAttribute("aria-expanded", "true");
+        }
+        if (row) row.scrollIntoView({ block: "center" });
+        DRAWER.open(id, regionKey);
+      }
+    }
+  </script>
+</body>
+</html>

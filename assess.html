@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Do your own assessment</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="napCrumbs"></div>
+    <div class="breadcrumbs srOnly">
+      <a id="backLink" href="criterion.html">← Back to indicator</a>
+    </div>
+
+    <div id="content"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id");
+    const city = params.get("city") || "";
+
+    const backLink = document.getElementById("backLink");
+    backLink.href = `criterion.html?id=${encodeURIComponent(id || "")}${city ? `&city=${encodeURIComponent(city)}` : ""}`;
+
+    const found = id ? findItemById(id) : null;
+    const indicatorName = found?.item?.title || "Indicator";
+
+    const content = document.getElementById("content");
+    content.innerHTML = `
+      <div class="detailCard">
+        <div class="note">Do your own assessment</div>
+        <h2 class="detailTitle">${indicatorName}</h2>
+        <div class="placeholder" style="margin-top:14px;">
+          Coming soon.
+        </div>
+      </div>
+    `;
+  </script>
+  <script src="regions.js"></script>
+  <script src="nap.js"></script>
+  <script>NAP.shell({ page: "criterion", crumbs: [["Overview","index.html"],"Assess"] });</script>
+</body>
+</html>

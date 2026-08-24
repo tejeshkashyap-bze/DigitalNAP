@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Industrial locations – National Action Plan</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div id="napCrumbs"></div>
+
+    <div class="hero tight">
+      <div class="eyebrow">Regions</div>
+      <h1 class="wide">Industrial locations</h1>
+      <p class="lede">Sixteen regions are in scope. Assessed regions are marked on the map;
+        select any region to read its indicators.</p>
+    </div>
+
+    <div class="band">
+      <div class="mapWrap" id="mapWrap" aria-label="Map of Australia with clickable regions">
+        <img class="mapImg" src="BZE%20REIP%20Map.png" alt="Map of Australia" />
+      </div>
+
+      <div class="secHead" style="margin-top:36px">
+        <h2>All regions</h2>
+        <div class="secNote">Assessed regions first.</div>
+      </div>
+      <div class="regions" id="regionList"></div>
+    </div>
+  </div>
+
+  <script src="regions.js"></script>
+  <script src="data.js"></script>
+  <script src="scores.js"></script>
+  <script src="nap.js"></script>
+  <script>
+    NAP.shell({ page: "map", crumbs: [["Overview", "index.html"], "Regions"] });
+
+    const wrap = document.getElementById("mapWrap");
+
+    // Pins come from regions.js rather than being written out by hand,
+    // so a renamed or repositioned region only changes in one place.
+    //
+    // A pin carries the region name only. The mean used to sit beside it,
+    // but a single number on a map reads as a ranking of the regions
+    // against each other, which is not what the assessment is for.
+    wrap.insertAdjacentHTML("beforeend", REGIONS.map(r => {
+      const on = NAP.isAssessed(r.key);
+      const cov = NAP.coverage(r.key);
+      return `<a class="cityLabel" data-status="${on ? "published" : "none"}"` +
+        ` style="left:${r.x}%; top:${r.y}%"` +
+        ` href="city.html?city=${encodeURIComponent(r.key)}"` +
+        ` title="${NAP.esc(r.name)}${on ? " — " + cov.scored
+          + " of " + cov.total + " indicators scored" : " — not yet assessed"}">` +
+        `${NAP.esc(r.name)}` +
+      `</a>`;
+    }).join(""));
+
+    const ordered = [...REGIONS].sort((a, b) =>
+      (NAP.isAssessed(b.key) ? 1 : 0) - (NAP.isAssessed(a.key) ? 1 : 0)
+      || a.name.localeCompare(b.name));
+
+    document.getElementById("regionList").innerHTML = ordered.map(r => {
+      const round = NAP.latestRound(r.key);
+      const cov = NAP.coverage(r.key);
+      const on = cov.scored > 0;
+      return `<a class="rCard" data-status="${on ? "published" : "none"}"` +
+        ` href="city.html?city=${encodeURIComponent(r.key)}">` +
+        `<div class="rTop"><span class="rName">${NAP.esc(r.name)}</span>` +
+          `<span class="rState">${NAP.esc(r.state)}</span></div>` +
+        `<span class="chip" data-s="${on ? "published" : "none"}">` +
+          `${on ? "Assessed · " + NAP.esc(round.date) : "Not yet assessed"}</span>` +
+        `<div class="rMeta">${on ? `${cov.scored} of ${cov.total} indicators scored`
+          : "No assessment round yet"}</div>` +
+      `</a>`;
+    }).join("");
+  </script>
+</body>
+</html>

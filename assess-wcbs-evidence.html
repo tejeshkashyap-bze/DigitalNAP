@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assessment Evidence – Wider Community Benefits Sharing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="napCrumbs"></div>
+    <div class="breadcrumbs srOnly">
+      <a id="backLink" href="assess-wider-community-benefits-sharing.html">← Back</a>
+    </div>
+
+    <div class="detailCard">
+      <div class="note">Step 1 of 4</div>
+      <h2 class="detailTitle">Gather Evidence</h2>
+      <p class="sectionText" style="margin-top:14px;">
+        Add sources and notes for each dimension before scoring.
+      </p>
+
+      <form id="evidenceForm">
+        <div id="dimensionFields"></div>
+
+        <div style="margin-top:22px;">
+          <button type="submit" class="homeNavCard" style="border:none; cursor:pointer;">Save and continue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id") || "wider-community-benefit-sharing";
+    const city = params.get("city") || "";
+    const qp = `id=${encodeURIComponent(id)}${city ? `&city=${encodeURIComponent(city)}` : ""}`;
+    document.getElementById("backLink").href = `assess-wider-community-benefits-sharing.html?${qp}`;
+
+    const storageKey = `wcbs-assessment-${city || "national"}`;
+
+    const dimensions = [
+      "Employment",
+      "Economic benefits",
+      "Specific community benefit funding arrangements",
+      "Subsidiarity"
+    ];
+
+    const existing = JSON.parse(localStorage.getItem(storageKey) || "{}");
+    const container = document.getElementById("dimensionFields");
+
+    dimensions.forEach((dim, i) => {
+      const safe = `dim${i}`;
+      const data = existing[safe] || {};
+      const block = document.createElement("section");
+      block.className = "section";
+      block.innerHTML = `
+        <h3 class="sectionTitle">${dim}</h3>
+        <label class="formLabel">Evidence links or sources</label>
+        <textarea class="formTextarea" name="${safe}_sources" rows="3" placeholder="Paste links, document titles, or source references">${data.sources || ""}</textarea>
+
+        <label class="formLabel">Notes and observations</label>
+        <textarea class="formTextarea" name="${safe}_notes" rows="4" placeholder="Add notes that support your later score">${data.notes || ""}</textarea>
+      `;
+      container.appendChild(block);
+    });
+
+    document.getElementById("evidenceForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+
+      dimensions.forEach((dim, i) => {
+        const safe = `dim${i}`;
+        saved[safe] = {
+          ...(saved[safe] || {}),
+          title: dim,
+          sources: fd.get(`${safe}_sources`) || "",
+          notes: fd.get(`${safe}_notes`) || ""
+        };
+      });
+
+      localStorage.setItem(storageKey, JSON.stringify(saved));
+      location.href = `assess-wcbs-scoring.html?${qp}`;
+    });
+  </script>
+  <script src="regions.js"></script>
+  <script src="nap.js"></script>
+  <script>NAP.shell({ page: "criterion", crumbs: [["Overview","index.html"],["Assess","assess-wider-community-benefits-sharing.html"],"Evidence"] });</script>
+</body>
+</html>

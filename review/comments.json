@@ -1,0 +1,227 @@
+{
+  "version": 1,
+  "project": "National-Action-Plan",
+  "comments": [
+    {
+      "id": "cmt6hwy711",
+      "seq": 1,
+      "createdAt": "2026-08-24T00:26:25.693Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "map.html",
+      "url": "http://localhost:5173/map.html",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "I don't want the mean score here with the regional location.",
+      "target": {
+        "selector": "img.mapImg",
+        "tag": "img",
+        "elementId": "",
+        "classes": "mapImg",
+        "text": "",
+        "html": "<img class=\"mapImg\" src=\"BZE%20REIP%20Map.png\" alt=\"Map of Australia\">",
+        "ancestors": "div.wrap › div.band › div.mapWrap",
+        "rect": {
+          "x": 132,
+          "y": 360.18,
+          "w": 998.67,
+          "h": 723.96
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "0px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmt6i1hbs2",
+      "seq": 2,
+      "createdAt": "2026-08-24T00:29:57.112Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=port-hedland",
+      "url": "http://localhost:5173/city.html?city=port-hedland",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "\"Scored only\" should be the default not the \"All\" tab",
+      "target": {
+        "selector": "#roundBar",
+        "tag": "div",
+        "elementId": "roundBar",
+        "classes": "roundBar",
+        "text": "Assessment August 2026 (latest)— no assessment — Mean 2.5 · 24 of 50 indicators scored All Scored only",
+        "html": "<div class=\"roundBar\" id=\"roundBar\" style=\"display: flex;\"> <label for=\"roundSelect\">Assessment</label> <select class=\"select\" id=\"roundSelect\"><option value=\"0\">August 2026 (latest)</option><option value=\"-1\">— no assessment —</option></select> <span class=\"roundSummary\" id=\"roundSummary\" title=\"Mean is the average across scored indicators only; unscored indicators are excluded.\">Mean <strong>2.5</strong> · 24 of 50 indicators scored</span> <span class=\"pushRight\"></span> <span class=\"toggle\" id=\"filterToggle\"> <button type=\"button\" data-filter=\"all\" aria-pressed=\"true\">All</button> <button type=\"button\" data-filter=\"scored\" aria-pressed=\"false\">Scored only</button> </span> </div>",
+        "ancestors": "div.wrap › div.band",
+        "rect": {
+          "x": 119.33,
+          "y": 606.05,
+          "w": 1024,
+          "h": 38.79
+        },
+        "styleHints": {
+          "display": "flex",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "0px",
+          "margin": "0px 0px 18px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmt6i43d93",
+      "seq": 3,
+      "createdAt": "2026-08-24T00:31:58.989Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=port-hedland",
+      "url": "http://localhost:5173/city.html?city=port-hedland",
+      "category": "colour",
+      "priority": "normal",
+      "comment": "Colour Scheme is wrong, use existing colour scheme",
+      "target": {
+        "selector": "div.scoreLegend",
+        "tag": "div",
+        "elementId": "",
+        "classes": "scoreLegend",
+        "text": "1 · Severe deficiency2 · Moderate deficiency3 · Developing4 · Effective5 · Leading practiceNot yet scored",
+        "html": "<div class=\"scoreLegend\"><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"1\"></span>1 · Severe deficiency</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"2\"></span>2 · Moderate deficiency</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"3\"></span>3 · Developing</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"4\"></span>4 · Effective</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"5\"></span>5 · Leading practice</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"-\"></span>Not yet scored</span></div>",
+        "ancestors": "div.wrap › div.band › div",
+        "rect": {
+          "x": 119.33,
+          "y": 662.84,
+          "w": 1024,
+          "h": 43.2
+        },
+        "styleHints": {
+          "display": "flex",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgb(243, 248, 252)",
+          "border-radius": "10px",
+          "padding": "12px 14px",
+          "margin": "0px 0px 18px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmt6jk44z4",
+      "seq": 4,
+      "createdAt": "2026-08-24T01:12:26.099Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=hunter-valley",
+      "url": "http://localhost:5173/city.html?city=hunter-valley",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Swap the colour for 1 and 2.",
+      "target": {
+        "selector": "div.scoreLegend",
+        "tag": "div",
+        "elementId": "",
+        "classes": "scoreLegend",
+        "text": "1 · Severe deficiency2 · Moderate deficiency3 · Developing4 · Effective5 · Leading practiceNot yet scored",
+        "html": "<div class=\"scoreLegend\"><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"1\"></span>1 · Severe deficiency</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"2\"></span>2 · Moderate deficiency</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"3\"></span>3 · Developing</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"4\"></span>4 · Effective</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"5\"></span>5 · Leading practice</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"-\"></span>Not yet scored</span></div>",
+        "ancestors": "div.wrap › div.band › div",
+        "rect": {
+          "x": 119.33,
+          "y": 662.84,
+          "w": 1024,
+          "h": 43.2
+        },
+        "styleHints": {
+          "display": "flex",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgb(243, 248, 252)",
+          "border-radius": "10px",
+          "padding": "12px 14px",
+          "margin": "0px 0px 18px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmt6juef95",
+      "seq": 5,
+      "createdAt": "2026-08-24T01:20:25.989Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=hunter-valley",
+      "url": "http://localhost:5173/city.html?city=hunter-valley",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "I want this section to be an overview of the region. Something like \"The Hunter hosts the largest coal export terminal in the world and is a major industrial hub in Australia, providing a unique testbed for our framework. If we can achieve substantial\nchange in the Hunter, we can apply those\nlessons to other regions.\nThe Hunter is responsible for 11% of Australia’s domestic emissions,10 11 12 13 and the coal exported from the Port of Newcastle generates emissions overseas equivalent to 80% of Australia’s total\ndomestic emissions, according to our analysis14.\nThe region is home to coal-fired power plants, numerous coal mines, and major industrial sites such as Tomago Aluminium and Orica’s Kooragang Island operations.\nThe Hunter is one of sixteen key industrial regions we have identified as a potential Renewable Energy Industrial Precinct\" \n\nFeel free to add and remove and edit this. Also from a design picture I would like to add a image from the region somewhere here. \n\nI would like to simmilar changes to the Port Hedland, Kwinana and Gladstone pages as well. I will paste some suggested text for each in chat.",
+      "target": {
+        "selector": "div.hero.tight:nth-of-type(2)",
+        "tag": "div",
+        "elementId": "",
+        "classes": "hero tight",
+        "text": "NSW · Assessed Hunter Valley 19 of 50 indicators were scored in the April 2025 round. Theme averages are calculated from scored indicators only and will move as the round is completed. 2.0Enabling Infrastructure5/15 scored2.0Industry Capability & Capacity1/10 scored3.1Policy & Governance13/17 scored",
+        "html": "<div class=\"hero tight\"> <div class=\"eyebrow\" id=\"eyebrow\">NSW · Assessed</div> <h1 id=\"regionTitle\">Hunter Valley</h1> <p class=\"lede\" id=\"regionLede\">19 of 50 indicators were scored in the <strong>April 2025</strong> round. Theme averages are calculated from scored indicators only and will move as the round is completed.</p> <div class=\"tiles\" id=\"themeTiles\"><div class=\"tile\"><div class=\"tileN\">2.0</div><div class=\"tileL\">Enabling Infrastructure<br>5/15 scored</div></div><div class=\"tile\"><div class=\"tileN\">2.0</div><div class=\"tileL\">Industry Capability &amp; Capacity<br>1/10 scored</div></div><div class=\"tile\"><div class=\"tileN\">3.1</div><div class=\"tileL\">Policy &amp; Governance<br>13/17 scored</div></div><div class=\"tile\"><div class=\"tileN muted\">–</div><div class=\"tileL\">Social Acceptance<br>0/5 scored</div></div><div class=\"tile\"><div class=\"tileN muted\">–</div><div class=\"tileL\">Financing the Transition<br>0/3 scored</div></div></div> </div>",
+        "ancestors": "div.wrap",
+        "rect": {
+          "x": 119.33,
+          "y": 103.46,
+          "w": 1024,
+          "h": 395.01
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "30px 0px 26px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    }
+  ],
+  "updatedAt": "2026-08-24T01:20:25.989Z"
+}

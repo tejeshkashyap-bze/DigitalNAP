@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assessment Review – Wider Community Benefits Sharing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="napCrumbs"></div>
+    <div class="breadcrumbs srOnly">
+      <a id="backLink" href="assess-wcbs-scoring.html">← Back</a>
+    </div>
+
+    <div class="detailCard">
+      <div class="note">Step 3 of 4</div>
+      <h2 class="detailTitle">Review your assessment</h2>
+
+      <div id="summary"></div>
+
+      <div style="margin-top:22px;">
+        <a id="completeLink" class="homeNavCard" href="assess-wcbs-complete.html">Complete assessment</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id") || "wider-community-benefit-sharing";
+    const city = params.get("city") || "";
+    const qp = `id=${encodeURIComponent(id)}${city ? `&city=${encodeURIComponent(city)}` : ""}`;
+
+    document.getElementById("backLink").href = `assess-wcbs-scoring.html?${qp}`;
+    document.getElementById("completeLink").href = `assess-wcbs-complete.html?${qp}`;
+
+    const storageKey = `wcbs-assessment-${city || "national"}`;
+    const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+
+    const dims = ["dim0", "dim1", "dim2", "dim3"];
+    let total = 0;
+
+    const html = dims.map((key) => {
+      const d = saved[key] || {};
+      const weighted = (Number(d.score || 0) * Number(d.weight || 0));
+      total += weighted;
+
+      return `
+        <section class="section">
+          <h3 class="sectionTitle">${d.title || key}</h3>
+          <p class="sectionText"><strong>Score:</strong> ${d.score || "Not set"} &nbsp; <strong>Weight:</strong> ${d.weight || 0}</p>
+          <p class="sectionText"><strong>Weighted contribution:</strong> ${weighted.toFixed(2)}</p>
+          <p class="sectionText"><strong>Sources:</strong><br>${(d.sources || "No sources provided").replace(/\n/g, "<br>")}</p>
+          <p class="sectionText"><strong>Notes:</strong><br>${(d.notes || "No notes provided").replace(/\n/g, "<br>")}</p>
+          <p class="sectionText"><strong>Justification:</strong><br>${(d.justification || "No justification provided").replace(/\n/g, "<br>")}</p>
+        </section>
+        <hr class="sectionDivider" />
+      `;
+    }).join("");
+
+    document.getElementById("summary").innerHTML = `
+      ${html}
+      <section class="section">
+        <h3 class="sectionTitle">Overall weighted score</h3>
+        <p class="sectionText"><strong>${total.toFixed(2)} / 5.00</strong></p>
+      </section>
+    `;
+  </script>
+  <script src="regions.js"></script>
+  <script src="nap.js"></script>
+  <script>NAP.shell({ page: "criterion", crumbs: [["Overview","index.html"],["Assess","assess-wider-community-benefits-sharing.html"],"Review"] });</script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wider Community Benefits Sharing – Learn more</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="napCrumbs"></div>
+    <div class="breadcrumbs srOnly">
+      <a id="backLink" href="criterion.html">← Back to indicator</a>
+    </div>
+
+    <div id="content"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id");
+    const city = params.get("city") || "";
+
+    const backLink = document.getElementById("backLink");
+    backLink.href = `criterion.html?id=${encodeURIComponent(id || "")}${city ? `&city=${encodeURIComponent(city)}` : ""}`;
+
+    const content = document.getElementById("content");
+
+    if (!id) {
+      content.innerHTML = `<div class="detailCard">
+        <h2 class="detailTitle">No criterion selected</h2>
+        <div class="meta">Go back and click a criterion.</div>
+      </div>`;
+    } else {
+      const found = findItemById(id);
+
+      if (!found) {
+        content.innerHTML = `<div class="detailCard">
+          <h2 class="detailTitle">Not found</h2>
+          <div class="meta">Couldn’t find a criterion with id: <code>${id}</code></div>
+        </div>`;
+      } else {
+        const { pillar, group, item } = found;
+        document.title = `${item.title} – Learn more`;
+
+        content.innerHTML = `
+          <div class="detailCard">
+            <div class="note">${pillar.pillarTitle} • ${group.groupTitle}</div>
+            <h2 class="detailTitle">${item.title}</h2>
+
+            <hr class="sectionDivider" />
+
+            <section class="section">
+              <h3 class="sectionTitle">Purpose of the Assessment</h3>
+              <p class="sectionText">
+                To measure the level to which the rewards of renewable energy developments are shared with the communities that host them.  This assessment asks how well are renewable energy projects integrated into the local community and how they contribute to the future vitality and success of the region.
+              </p>
+            </section>
+
+            <section class="section">
+              <h3 class="sectionTitle">Assessment Framework</h3>
+              <p class="sectionText">
+                Community Benefits are assessed against four dimensions that aim to provide a holistic view of whether REIP or renewables projects are effectively supporting their host communities through economic and social benefits:
+              </p>
+              <ul class="bulletList">
+                <li><b>Employment:</b> Evidence of local jobs, local being defined as within 100km.</li>
+                <li><b>Economic benefits:</b>  How much of the economic benefit stays in the region versus economic benefit flowing offshore or interstate. Evidence of local training, local content and supply chain opportunities, ownership share in infrastructure, lease payments for land, or transmission easements, other payments such as to neighbours.</li>
+                <li><b>Specific Community Benefit Fund:</b> What payments are made to the community and how are they allocated.</li>
+                <li><b>Community Subsidiarity:</b> To what level can the local community have a say in what benefits they want to receive and how the benefits of the renewable energy infrastructure flow to the community.</li>
+              </ul>
+            </section>
+
+            <section class="section">
+              <h3 class="sectionTitle">Data Sources</h3>
+              <ul class="bulletList">
+                <li>Annual reports of proponents and investors.</li>
+                <li>Council minutes, regional reports and datasets.</li>
+                <li>Stakeholder feedback documented through interviews, emails and meeting notes.</li>
+                <li>Evidence of a community benefit fund and beneficiaries.</li>
+                <li>Evidence of coordination and collaboration, eg MOUs press releases, agreements.</li>
+                <li>State or local benefits sharing plans and guidelines.</li>
+              </ul>
+            </section>
+
+            <section class="section">
+              <h3 class="sectionTitle">Scoring Process</h3>
+              <ol class="numberedList">
+                <li><b>Preliminary Analysis:</b> Review data and evidence sources listed above for this indicator.</li>
+                <li><b>Indicator Evaluation:</b> Assess the evidence of consultation processes and the quality of messaging and leadership.</li>
+                <li><b>Scoring Aggregation:</b> Calculate the overall assessment score based on weighted indicators.</li>
+                <li><b>Stakeholder Insights:</b> Gather input from academia, environmental NGOs, government, and community groups.</li>
+                <li><b>Review:</b> Conduct expert validation to finalise the assigned score.</li>
+              </ol>
+            </section>
+
+            <section class="section">
+  <h3 class="sectionTitle">Weighting Table</h3>
+  <div class="tableWrap">
+    <table class="dataTable" aria-label="Weighting table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Weight</th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Employment</td>
+          <td>0.25</td>
+          <td>No local jobs, FIFO or DIDO workforces.</td>
+          <td>Minimal local construction only, no ongoing jobs.</td>
+          <td>Mandated local construction and O&amp;M jobs in merit criteria.</td>
+          <td>Construction jobs and some ongoing jobs beyond mandates.</td>
+          <td>Local workforce is trained and upskilled and the RE has brought ongoing jobs to town/region.</td>
+        </tr>
+        <tr>
+          <td>Economic benefits</td>
+          <td>0.25</td>
+          <td>No apprenticeships, training or local content.</td>
+          <td>Minimal local content and supply chain opportunities.</td>
+          <td>Mandated training apprenticeships and supply chain opportunities in merit criteria.<br>Lease payments for project life cycle.</td>
+          <td>Local share offers and financial compensations of amenity for neighbours, jobs, training and local content, lease payments.</td>
+          <td>Mandated local ownership share in RE infrastructure, financial compensations for neighbours, training and supply chain, lease payments. Long term economic benefits creating prosperity for the region.</td>
+        </tr>
+        <tr>
+          <td>Specific Community Benefit funding arrangements.</td>
+          <td>0.25</td>
+          <td>Do not exist.</td>
+          <td>Limited ad hoc payments, footy jersey.</td>
+          <td>Project community benefit fund included in merit criteria.<br>Initial benefit funds run by proponents for life cycle with small grants.</td>
+          <td>Coordinated benefit funding distributed across affected regions and benefit funds supported by proponents.</td>
+          <td>Partnership and regional coordination between developers, government and community to dedicated benefit fund co-designed and managed by the local community. Legacy outcomes are achieved.</td>
+        </tr>
+        <tr>
+          <td>Subsidiarity - community empowerment and strong local state and industry alignment</td>
+          <td>0.25</td>
+          <td>Local community has no plan about what they want or need and the state assumes the community has no additional needs to host RE infrastructure.</td>
+          <td>The community has some plans about what is needed and how to capture benefits but no coordination with state and/or developers.</td>
+          <td>The community has a plan through shire or council and there is communication with the state and coordination with developers.</td>
+          <td>The community has a plan and an SPV structure (community benefit fund) and coordination to capture benefits. There is a level of collaboration between community, state and industry to deliver aspects of the plan and contribute to fund.</td>
+          <td>The community has a clear plan and a structure (community benefit fund (CBF)). State and industry agree to deliver aspects of the plan. Industry contributes to CBF at an agreed rate. State provides infrastructure upgrades that address community needs, e.g. water supply, rubbish dumps. Community needs are not displaced for RE and the community is better off from development.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+         <section class="section">
+  <h3 class="sectionTitle">Scoring Description</h3>
+  <div class="tableWrap">
+    <table class="dataTable" aria-label="Scoring description table">
+      <thead>
+        <tr>
+          <th>Score</th>
+          <th>Description</th>
+          <th>Key Characteristics</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Minimal level of community benefit<br>(Severe Deficiency)</td>
+          <td>
+            <ul class="cellList">
+              <li>Minimal or no framework for benefits to the community.</li>
+              <li>Lack of local jobs.</li>
+              <li>Lack of local training and apprenticeship opportunities.</li>
+              <li>Lack of local content supply chain opportunities.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Basic level of community benefit<br>(Moderate Deficiency)</td>
+          <td>
+            <ul class="cellList">
+              <li>Some fragmented ad hoc community benefits are offered, such as footy jersey benefits.</li>
+              <li>Limited local employment opportunities.</li>
+              <li>Limited training, apprenticeship and supply chain opportunities.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Moderate level of community benefit<br>(Developing)</td>
+          <td>
+            <ul class="cellList">
+              <li>Mandated local construction and operational jobs.</li>
+              <li>Mandated merit criteria provide training apprenticeships and supply chain opportunities.</li>
+              <li>The community has been supported to generate a benefits plan as required by merit criteria.</li>
+              <li>Economic and social benefits of projects meet some community needs over project timelines.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Strong level of community benefit (Effective)</td>
+          <td>
+            <ul class="cellList">
+              <li>Relatively high proportion of jobs are local, beyond merit criteria mandate.</li>
+              <li>High level of community involvement in opportunities to participate and coordinate, e.g. stagger development to ensure maximum local opportunity and minimise disruptions.</li>
+              <li>Strategic place based planning in place based context, high community input and many community needs met.</li>
+              <li>SPV or community benefit fund with strategic and regional focus.</li>
+              <li>Share options, neighbour payments.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Exemplary level of community benefit planning<br>(Leading Practice)</td>
+          <td>
+            <ul class="cellList">
+              <li>Very high relative proportion of jobs are local, beyond merit criteria mandate.</li>
+              <li>Community benefits (supply chain, training, payments etc.) are coordinated, collaborative, strategic, place-based, participatory, and grounded in community needs.</li>
+              <li>Mandated ownership and benefits for all of the community are exceeded.</li>
+              <li>Proponents are respected and valued partners in the community.</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+          </div>
+        `;
+      }
+    }
+  </script>
+  <script src="regions.js"></script>
+  <script src="nap.js"></script>
+  <script>NAP.shell({ page: "learn", crumbs: [["Overview","index.html"],["Criteria","CSC.html"],"Community benefits"] });</script>
+</body>
+</html>

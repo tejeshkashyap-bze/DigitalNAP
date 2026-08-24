@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Previous assessments</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div id="napCrumbs"></div>
+    <div id="content"></div>
+  </div>
+
+  <script src="regions.js"></script>
+  <script src="data.js"></script>
+  <script src="scores.js"></script>
+  <script src="nap.js"></script>
+  <script>
+    const params   = new URLSearchParams(location.search);
+    const id       = params.get("id");
+    const cityKey  = params.get("city") || "";
+
+    const found    = id ? findItemById(id) : null;
+    const pillar   = found?.pillar;
+    const group    = found?.group;
+    const item     = found?.item;
+
+    // Region display names come from regions.js — "port-kembla" is
+    // "Illawarra", which title-casing the key would never produce.
+    const cityName      = cityKey ? regionName(cityKey) : "this region";
+    const indicatorName = item?.title || "this indicator";
+    const content       = document.getElementById("content");
+
+    NAP.shell({
+      page: "region",
+      crumbs: [
+        ["Overview", "index.html"],
+        ["Regions", "map.html"],
+        ...(cityKey ? [[cityName, `city.html?city=${encodeURIComponent(cityKey)}`]] : []),
+        indicatorName,
+      ],
+    });
+
+    // Score colour label map
+    const SCORE_LABELS = NAP.WORDS;
+
+    function render(evidenceData) {
+      const rounds = evidenceData?.[id] || [];
+
+      const breadcrumb = (pillar && group)
+        ? `<div class="note">${pillar.pillarTitle} • ${group.groupTitle} • ${cityName}</div>`
+        : `<div class="note">${cityName}</div>`;
+
+      if (!rounds.length) {
+        content.innerHTML = `
+          <div class="detailCard">
+            ${breadcrumb}
+            <h2 class="detailTitle">${indicatorName}</h2>
+            <p class="sectionText" style="margin-top:14px; color:#888; font-style:italic;">
+              No assessments have been recorded yet for this indicator in ${cityName}.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      const roundsHtml = rounds.map((round, i) => {
+        const label = SCORE_LABELS[round.score] || "";
+        const paras = (round.paragraphs || []).map(p =>
+          p.startsWith("<") ? p : `<p class="sectionText">${p}</p>`
+        ).join("");
+        const isLatest = i === 0;
+        return `
+          <section class="section">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+              <span class="itemLink score-${round.score}" style="display:inline-flex; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; pointer-events:none; text-decoration:none;">
+                <span>${label}</span>
+                <span class="scoreBadge">${round.score}</span>
+              </span>
+              <span style="color:#666; font-size:13px;">${round.date}${isLatest ? " <em>(latest)</em>" : ""}</span>
+            </div>
+            ${paras}
+          </section>
+        `;
+      }).join('<hr class="sectionDivider" />');
+
+      content.innerHTML = `
+        <div class="detailCard">
+          ${breadcrumb}
+          <h2 class="detailTitle">${indicatorName}</h2>
+          <hr class="sectionDivider" />
+          ${roundsHtml}
+        </div>
+      `;
+    }
+
+    // Dynamically load the city-specific evidence file, then render
+    if (cityKey) {
+      const script   = document.createElement("script");
+      script.src     = `evidence-${cityKey}.js`;
+      script.onload  = () => render(window.CITY_EVIDENCE);
+      script.onerror = () => render(null);
+      document.head.appendChild(script);
+    } else {
+      render(null);
+    }
+  </script>
+</body>
+</html>

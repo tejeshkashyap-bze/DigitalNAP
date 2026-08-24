@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learn more</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div id="napCrumbs"></div>
+    <div id="content"></div>
+  </div>
+
+  <script src="regions.js"></script>
+  <script src="data.js"></script>
+  <script src="scores.js"></script>
+  <script src="learn-data.js"></script>
+  <script src="nap.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id     = params.get("id");
+    const city   = params.get("city") || "";
+
+    const content = document.getElementById("content");
+    const found0  = id ? findItemById(id) : null;
+
+    NAP.shell({
+      page: "learn",
+      crumbs: [
+        ["Overview", "index.html"],
+        ...(city
+          ? [["Regions", "map.html"], [regionName(city), `city.html?city=${encodeURIComponent(city)}`]]
+          : [["Criteria", "CSC.html"]]),
+        found0 ? found0.item.title : "Methodology",
+      ],
+    });
+
+    if (!id) {
+      content.innerHTML = `<div class="detailCard">
+        <h2 class="detailTitle">No criterion selected</h2>
+        <div class="meta">Go back and click a criterion.</div>
+      </div>`;
+    } else {
+      const found = findItemById(id);
+
+      if (!found) {
+        content.innerHTML = `<div class="detailCard">
+          <h2 class="detailTitle">Not found</h2>
+          <div class="meta">Couldn't find a criterion with id: <code>${id}</code></div>
+        </div>`;
+      } else {
+        const { pillar, group, item } = found;
+        document.title = `${item.title} – Learn more`;
+
+        const data = (typeof LEARN_DATA !== "undefined") ? LEARN_DATA[id] : null;
+
+        if (!data) {
+          content.innerHTML = `
+            <div class="detailCard">
+              <div class="note">${pillar.pillarTitle} • ${group.groupTitle}</div>
+              <h2 class="detailTitle">${item.title}</h2>
+              <hr class="sectionDivider" />
+              <section class="section">
+                <p class="sectionText" style="color:#888; font-style:italic;">
+                  Detailed content for this indicator is coming soon.
+                  To contribute content, edit the <code>learn-data.js</code> file and add an entry for <code>"${id}"</code>.
+                </p>
+              </section>
+            </div>
+          `;
+        } else {
+          content.innerHTML = renderLearnPage(pillar, group, item, data);
+        }
+      }
+    }
+
+    // ── Renderer ──────────────────────────────────────────────────────────────
+
+    function renderLearnPage(pillar, group, item, data) {
+      const sections = [];
+
+      // Purpose
+      if (data.purpose) {
+        sections.push(`
+          <section class="section">
+            <h3 class="sectionTitle">Purpose of the Assessment</h3>
+            <p class="sectionText">${data.purpose}</p>
+          </section>
+        `);
+      }
+
+      // Assessment Framework
+      if (data.frameworkIntro || (data.frameworkItems && data.frameworkItems.length)) {
+        const bullets = (data.frameworkItems || [])
+          .map(f => `<li>${f}</li>`).join("");
+        sections.push(`
+          <section class="section">
+            <h3 class="sectionTitle">Assessment Framework</h3>
+            ${data.frameworkIntro ? `<p class="sectionText">${data.frameworkIntro}</p>` : ""}
+            ${bullets ? `<ul class="bulletList">${bullets}</ul>` : ""}
+          </section>
+        `);
+      }
+
+      // Data Sources
+      if (data.dataSources && data.dataSources.length) {
+        const items = data.dataSources.map(s => `<li>${s}</li>`).join("");
+        sections.push(`
+          <section class="section">
+            <h3 class="sectionTitle">Data Sources</h3>
+            <ul class="bulletList">${items}</ul>
+          </section>
+        `);
+      }
+
+      // Scoring Process
+      if (data.scoringProcess && data.scoringProcess.length) {
+        const steps = data.scoringProcess
+          .map(s => `<li><b>${s.label}:</b> ${s.desc}</li>`)
+          .join("");
+        sections.push(`
+          <section class="section">
+            <h3 class="sectionTitle">Scoring Process</h3>
+            <ol class="numberedList">${steps}</ol>
+          </section>
+        `);
+      }
+
+      // Weighting Table
+      if (data.weightingTable && data.weightingTable.length) {
+        const rows = data.weightingTable.map(dim => `
+          <tr>
+            <td>${dim.dimension}</td>
+            <td>${dim.weight}</td>
+            ${(dim.scores || []).map(s => `<td>${s}</td>`).join("")}
+          </tr>
+        `).join("");
+        sections.push(`
+          <section class="section">
+            <h3 class="sectionTitle">Weighting Table</h3>
+            <div class="tableWrap">
+              <table class="dataTable" aria-label="Weighting table">
+                <thead>
+                  <tr>
+                    <th>Dimension</th>
+                    <th>Weight</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>
+            </div>
+          </section>
+        `);
+      }
+
+      // Scoring Descriptions
+      if (data.scoringDescriptions && data.scoringDescriptions.length) {
+        const rows = data.scoringDescriptions.map(s => {
+          const bullets = (s.characteristics || [])
+            .map(c => `<li>${c}</li>`).join("");
+          return `
+            <tr>
+              <td>${s.score}</td>
+              <td>${s.label}</td>
+              <td>${bullets ? `<ul class="cellList">${bullets}</ul>` : ""}</td>
+            </tr>
+          `;
+        }).join("");
+        sections.push(`
+          <section class="section">
+            <h3 class="sectionTitle">Scoring Description</h3>
+            <div class="tableWrap">
+              <table class="dataTable" aria-label="Scoring description table">
+                <thead>
+                  <tr>
+                    <th>Score</th>
+                    <th>Description</th>
+                    <th>Key Characteristics</th>
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>
+            </div>
+          </section>
+        `);
+      }
+
+      return `
+        <div class="detailCard">
+          <div class="note">${pillar.pillarTitle} • ${group.groupTitle}</div>
+          <h2 class="detailTitle">${item.title}</h2>
+          <hr class="sectionDivider" />
+          ${sections.join("")}
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

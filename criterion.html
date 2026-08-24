@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Indicator – National Action Plan</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div id="napCrumbs"></div>
+    <div id="content"></div>
+  </div>
+
+  <script src="regions.js"></script>
+  <script src="data.js"></script>
+  <script src="scores.js"></script>
+  <script src="nap.js"></script>
+  <script>
+    const id   = NAP.qs("id");
+    const city = NAP.qs("city");
+    const el   = document.getElementById("content");
+
+    const found = id ? NAP.itemById(id) : null;
+
+    if (!found) {
+      NAP.shell({ page: "criterion", crumbs: [["Overview", "index.html"], "Indicator"] });
+      el.innerHTML = `<div class="hero tight"><h1 class="wide">Indicator not found</h1>` +
+        `<p class="lede">${id ? `No indicator has the id <code>${NAP.esc(id)}</code>.`
+          : "No indicator was selected."} ` +
+        `<a href="CSC.html">Browse the criteria</a>.</p></div>`;
+    } else {
+      const rName = city ? regionName(city) : "";
+      const round = city ? NAP.latestRound(city) : null;
+      const score = round ? round.scores[id] : undefined;
+
+      document.title = `${found.title} – National Action Plan`;
+
+      NAP.shell({
+        page: "criterion",
+        crumbs: [
+          ["Overview", "index.html"],
+          ...(city
+            ? [["Regions", "map.html"], [rName, `city.html?city=${encodeURIComponent(city)}`]]
+            : [["Criteria", "CSC.html"]]),
+          found.title,
+        ],
+      });
+
+      const qp = `id=${encodeURIComponent(id)}${city ? `&city=${encodeURIComponent(city)}` : ""}`;
+
+      // The score comes first. Previously this page opened with "Choose an
+      // option below" and three equal boxes, which asked the reader to pick
+      // a route before telling them anything.
+      const scoreBlock = (typeof score === "number")
+        ? `<div class="dScore" style="border:0;padding:0;margin-top:8px">` +
+            NAP.sBox(score, "lg") +
+            `<div><div class="dScoreWord">${NAP.esc(NAP.word(score))}</div>` +
+            `<div class="dScoreMeta">${NAP.esc(rName)} · ${NAP.esc(round.date)}</div></div>` +
+          `</div>`
+        : (city
+            ? `<p class="lede">Not yet assessed in ${NAP.esc(rName)}.</p>`
+            : `<p class="lede">Select a region to see how this indicator scores there.</p>`);
+
+      el.innerHTML =
+        `<div class="hero tight">` +
+          `<div class="eyebrow">${NAP.esc(found.pillarTitle)} · ${NAP.esc(found.groupTitle)}</div>` +
+          `<h1 class="wide">${NAP.esc(found.title)}</h1>` +
+          scoreBlock +
+        `</div>` +
+        `<div class="band"><div class="actionGrid">` +
+          (typeof score === "number"
+            ? `<a class="actionCard" href="city.html?city=${encodeURIComponent(city)}#${encodeURIComponent(id)}">` +
+              `<div class="actionTitle">Read the evidence</div>` +
+              `<div class="actionDesc">The grading scale and the reasoning behind this score, ` +
+              `in the context of the region's other indicators.</div></a>`
+            : "") +
+          `<a class="actionCard" href="learn.html?${qp}">` +
+            `<div class="actionTitle">Methodology</div>` +
+            `<div class="actionDesc">The framework, data sources, scoring process and ` +
+            `grading scale for this indicator.</div></a>` +
+          (city
+            ? `<a class="actionCard" href="previous.html?${qp}">` +
+              `<div class="actionTitle">Assessment history</div>` +
+              `<div class="actionDesc">Every recorded round for this indicator in ` +
+              `${NAP.esc(rName)}.</div></a>`
+            : "") +
+        `</div></div>`;
+    }
+  </script>
+</body>
+</html>

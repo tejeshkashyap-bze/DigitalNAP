@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>National Action Plan – Beyond Zero Emissions</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div id="napCrumbs"></div>
+
+    <div class="hero">
+      <div class="eyebrow">Beyond Zero Emissions</div>
+      <h1>Assessing Australia's industrial regions against the Critical Success Criteria</h1>
+      <p class="lede">The National Action Plan assesses each region against a shared set of
+        indicators across five themes, scoring every one from 1 to 5 against its own grading
+        scale. Each score is backed by published evidence.</p>
+      <div class="tiles" id="tiles"></div>
+    </div>
+
+    <div class="band">
+      <div class="secHead">
+        <h2>Regions</h2>
+        <div class="secNote">Assessed regions carry a coverage strip showing how much of the
+          round is scored. Select a region to read its indicators.</div>
+      </div>
+      <div class="regions" id="regions"></div>
+    </div>
+
+    <div class="band">
+      <div class="secHead">
+        <h2>Explore</h2>
+      </div>
+      <div class="actionGrid">
+        <a class="actionCard" href="map.html">
+          <div class="actionTitle">Industrial locations</div>
+          <div class="actionDesc">The 16 regions on the map, with the score of each assessed
+            region.</div>
+        </a>
+        <a class="actionCard" href="CSC.html">
+          <div class="actionTitle">Critical Success Criteria</div>
+          <div class="actionDesc">The full criteria library — five themes, the groups within
+            them and every indicator.</div>
+        </a>
+        <a class="actionCard" href="contributors.html">
+          <div class="actionTitle">Contributors</div>
+          <div class="actionDesc">The people and organisations behind the assessments.</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="homeFooterNote">
+      BZE's National Action Plan is made possible through your generous donations.
+    </div>
+  </div>
+
+  <script src="regions.js"></script>
+  <script src="data.js"></script>
+  <script src="scores.js"></script>
+  <script src="nap.js"></script>
+  <script>
+    NAP.shell({ page: "overview" });
+
+    const total     = NAP.allItems().length;
+    const assessed  = NAP.assessedRegions();
+    const pairs     = assessed.length * total;
+    const scored    = assessed.reduce((n, r) => n + NAP.coverage(r.key).scored, 0);
+
+    document.getElementById("tiles").innerHTML = [
+      [REGIONS.length, "regions in scope"],
+      [assessed.length, "with an assessment"],
+      [total, "indicators per region"],
+      [pairs ? Math.round(scored / pairs * 100) + "<sup>%</sup>" : "–",
+        `assessed regions scored<br>${scored} of ${pairs} region–indicator pairs`],
+    ].map(([n, l]) => `<div class="tile"><div class="tileN">${n}</div>` +
+      `<div class="tileL">${l}</div></div>`).join("");
+
+    // Regions: assessed first, each with a coverage strip.
+    const ordered = [...REGIONS].sort((a, b) =>
+      (NAP.isAssessed(b.key) ? 1 : 0) - (NAP.isAssessed(a.key) ? 1 : 0)
+      || a.name.localeCompare(b.name));
+
+    document.getElementById("regions").innerHTML = ordered.map(r => {
+      const round = NAP.latestRound(r.key);
+      const cov   = NAP.coverage(r.key);
+      const on    = cov.scored > 0;
+
+      const strip = NAP.allItems().map(i => {
+        const v = round ? round.scores[i.id] : undefined;
+        return `<span class="dot"${typeof v === "number" ? ` data-v="${v}"` : ""}></span>`;
+      }).join("");
+
+      return `<a class="rCard" data-status="${on ? "published" : "none"}"` +
+        ` href="city.html?city=${encodeURIComponent(r.key)}">` +
+        `<div class="rTop"><span class="rName">${NAP.esc(r.name)}</span>` +
+          `<span class="rState">${NAP.esc(r.state)}</span></div>` +
+        `<span class="chip" data-s="${on ? "published" : "none"}">` +
+          `${on ? "Assessed · " + NAP.esc(round.date) : "Not yet assessed"}</span>` +
+        (on ? `<div class="dots">${strip}</div>` : "") +
+        `<div class="rMeta">${on ? `${cov.scored} of ${cov.total} indicators scored`
+          : `${cov.total} indicators awaiting assessment`}</div>` +
+      `</a>`;
+    }).join("");
+  </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Critical Success Criteria – National Action Plan</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div id="napCrumbs"></div>
+
+    <div class="hero tight">
+      <div class="eyebrow">Methodology</div>
+      <h1 class="wide">Critical Success Criteria</h1>
+      <p class="lede">Five themes, the groups within them, and every indicator a region is
+        assessed against. Select an indicator to read its methodology, or compare how it
+        scores across the assessed regions.</p>
+      <div class="tiles" id="tiles"></div>
+    </div>
+
+    <div class="band">
+      <div class="secHead">
+        <h2>The criteria</h2>
+        <div class="secNote">Scores shown are the mean across assessed regions, from scored
+          indicators only.</div>
+      </div>
+
+      <div class="roundBar">
+        <label for="modeSelect">Show</label>
+        <select class="select" id="modeSelect">
+          <option value="structure">Structure only</option>
+          <option value="mean" selected>Mean across assessed regions</option>
+        </select>
+        <span class="roundSummary" id="modeNote"></span>
+      </div>
+
+      <div id="themes"></div>
+    </div>
+  </div>
+
+  <script src="regions.js"></script>
+  <script src="data.js"></script>
+  <script src="scores.js"></script>
+  <script src="nap.js"></script>
+  <script>
+    NAP.shell({ page: "criteria", crumbs: [["Overview", "index.html"], "Criteria"] });
+
+    const assessed = NAP.assessedRegions();
+    const items    = NAP.allItems();
+
+    document.getElementById("tiles").innerHTML = [
+      [CSC.length, "themes"],
+      [CSC.reduce((n, p) => n + p.groups.length, 0), "groups"],
+      [items.length, "indicators"],
+      [assessed.length, "regions assessed"],
+    ].map(([n, l]) => `<div class="tile"><div class="tileN">${n}</div>` +
+      `<div class="tileL">${l}</div></div>`).join("");
+
+    // Mean for one indicator across every assessed region.
+    function acrossMean(id) {
+      const vals = assessed
+        .map(r => (NAP.latestRound(r.key).scores || {})[id])
+        .filter(v => typeof v === "number");
+      return vals.length
+        ? { mean: vals.reduce((a, b) => a + b, 0) / vals.length, n: vals.length }
+        : { mean: null, n: 0 };
+    }
+
+    const modeEl = document.getElementById("modeSelect");
+    const noteEl = document.getElementById("modeNote");
+
+    function render() {
+      const showMean = modeEl.value === "mean";
+      noteEl.textContent = showMean
+        ? `Averaged over ${assessed.length} assessed regions`
+        : "";
+
+      document.getElementById("themes").innerHTML = CSC.map((p, pi) => {
+        const ids = p.groups.flatMap(g => g.items.map(i => i.id));
+        const scoredCount = ids.filter(id => acrossMean(id).n > 0).length;
+
+        const groups = p.groups.map(g => {
+          const rows = g.items.map(it => {
+            const { mean, n } = acrossMean(it.id);
+            const right = showMean && mean !== null
+              ? `<span class="sWord">mean of ${n} region${n === 1 ? "" : "s"}</span>` +
+                `<span class="sBox" data-v="${Math.round(mean)}">${mean.toFixed(1)}</span>`
+              : (showMean ? `<span class="sWord">not yet scored</span>` + NAP.sBox(undefined) : "");
+            return `<a class="iRow" href="learn.html?id=${encodeURIComponent(it.id)}">` +
+              `<span class="iName">${NAP.esc(it.title)}</span>` +
+              `<span class="iScore">${right}</span></a>`;
+          }).join("");
+          return `<div class="grp"><div class="grpName">${NAP.esc(g.groupTitle)}</div>${rows}</div>`;
+        }).join("");
+
+        const isOpen = pi === 0;
+        return `<section class="pillar">` +
+          `<button class="pBtn" type="button" aria-expanded="${isOpen}">` +
+            `<span class="pIdx">${String(pi + 1).padStart(2, "0")}</span>` +
+            `<span class="pName">${NAP.esc(p.pillarTitle)}</span>` +
+            `<span class="pCount">${p.groups.length} groups · ${ids.length} indicators` +
+              (showMean ? ` · <strong>${scoredCount} with scores</strong>` : "") + `</span>` +
+            `<span class="pCar"></span>` +
+          `</button>` +
+          `<div class="pBody${isOpen ? " open" : ""}">${groups}</div>` +
+        `</section>`;
+      }).join("");
+
+      document.querySelectorAll(".pBtn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const on = btn.getAttribute("aria-expanded") === "true";
+          btn.setAttribute("aria-expanded", String(!on));
+          btn.nextElementSibling.classList.toggle("open", !on);
+        });
+      });
+    }
+
+    modeEl.addEventListener("change", render);
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assessment Complete – Wider Community Benefits Sharing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="napCrumbs"></div>
+    <div class="breadcrumbs srOnly">
+      <a id="backLink" href="assess-wcbs-review.html">← Back</a>
+    </div>
+
+    <div class="detailCard">
+      <div class="note">Step 4 of 4</div>
+      <h2 class="detailTitle">Assessment complete</h2>
+
+      <p class="sectionText" style="margin-top:14px;">
+        Your Wider Community Benefits Sharing assessment has been completed in this browser session.
+      </p>
+
+      <p class="sectionText">
+        In a future version, this page could support saving, exporting, sharing, moderation, or submission for review.
+      </p>
+
+      <div style="margin-top:22px;">
+        <a id="returnLink" class="homeNavCard" href="criterion.html">Return to indicator</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id") || "wider-community-benefit-sharing";
+    const city = params.get("city") || "";
+    const qp = `id=${encodeURIComponent(id)}${city ? `&city=${encodeURIComponent(city)}` : ""}`;
+
+    document.getElementById("backLink").href = `assess-wcbs-review.html?${qp}`;
+    document.getElementById("returnLink").href = `criterion.html?${qp}`;
+  </script>
+  <script src="regions.js"></script>
+  <script src="nap.js"></script>
+  <script>NAP.shell({ page: "criterion", crumbs: [["Overview","index.html"],["Assess","assess-wider-community-benefits-sharing.html"],"Complete"] });</script>
+</body>
+</html>

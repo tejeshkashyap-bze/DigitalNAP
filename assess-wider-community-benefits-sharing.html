@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assess – Wider Community Benefits Sharing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="napCrumbs"></div>
+    <div class="breadcrumbs srOnly">
+      <a id="backLink" href="criterion.html">← Back to indicator</a>
+    </div>
+
+    <div class="detailCard">
+      <div class="note">Assessment workflow</div>
+      <h2 class="detailTitle">Wider Community Benefits Sharing</h2>
+
+      <div id="cityNote" class="meta" style="margin-top:10px;"></div>
+
+      <hr class="sectionDivider" />
+
+      <section class="section">
+        <h3 class="sectionTitle">Purpose of this assessment</h3>
+        <p class="sectionText">
+          This workflow helps a user assess their region against the Wider Community Benefits Sharing indicator.
+        </p>
+        <p class="sectionText">
+          You will gather evidence, score each of the four dimensions, and review a weighted result.
+        </p>
+      </section>
+
+      <section class="section">
+        <h3 class="sectionTitle">The four dimensions you will assess</h3>
+        <ul class="bulletList">
+          <li>Employment</li>
+          <li>Economic benefits</li>
+          <li>Specific community benefit funding arrangements</li>
+          <li>Subsidiarity – community empowerment and strong local, state and industry alignment</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h3 class="sectionTitle">What you will need</h3>
+        <ul class="bulletList">
+          <li>Links to evidence sources</li>
+          <li>Optional uploaded or referenced documents</li>
+          <li>Notes explaining your reasoning</li>
+          <li>A score from 1–5 for each dimension</li>
+        </ul>
+      </section>
+
+      <div style="margin-top:22px;">
+        <a id="startLink" class="homeNavCard" href="assess-wcbs-evidence.html">Start assessment</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id") || "wider-community-benefit-sharing";
+    const city = params.get("city") || "";
+
+    const qp = `id=${encodeURIComponent(id)}${city ? `&city=${encodeURIComponent(city)}` : ""}`;
+    document.getElementById("backLink").href = `criterion.html?${qp}`;
+    document.getElementById("startLink").href = `assess-wcbs-evidence.html?${qp}`;
+
+    function prettyCity(s) {
+      if (!s) return "National context";
+      return s.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+    }
+
+    document.getElementById("cityNote").textContent = `Assessment context: ${prettyCity(city)}`;
+  </script>
+  <script src="regions.js"></script>
+  <script src="nap.js"></script>
+  <script>NAP.shell({ page: "criterion", crumbs: [["Overview","index.html"],"Assess"] });</script>
+</body>
+</html>

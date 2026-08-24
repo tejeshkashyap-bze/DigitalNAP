@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assessment Scoring – Wider Community Benefits Sharing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="napCrumbs"></div>
+    <div class="breadcrumbs srOnly">
+      <a id="backLink" href="assess-wcbs-evidence.html">← Back</a>
+    </div>
+
+    <div class="detailCard">
+      <div class="note">Step 2 of 4</div>
+      <h2 class="detailTitle">Score each dimension</h2>
+      <p class="sectionText" style="margin-top:14px;">
+        Choose a score from 1–5 and explain your reasoning.
+      </p>
+
+      <form id="scoringForm">
+        <div id="scoreFields"></div>
+
+        <div style="margin-top:22px;">
+          <button type="submit" class="homeNavCard" style="border:none; cursor:pointer;">Save and continue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id") || "wider-community-benefit-sharing";
+    const city = params.get("city") || "";
+    const qp = `id=${encodeURIComponent(id)}${city ? `&city=${encodeURIComponent(city)}` : ""}`;
+    document.getElementById("backLink").href = `assess-wcbs-evidence.html?${qp}`;
+
+    const storageKey = `wcbs-assessment-${city || "national"}`;
+    const existing = JSON.parse(localStorage.getItem(storageKey) || "{}");
+
+    const dimensions = [
+      { key: "dim0", title: "Employment", weight: 0.25 },
+      { key: "dim1", title: "Economic benefits", weight: 0.25 },
+      { key: "dim2", title: "Specific community benefit funding arrangements", weight: 0.25 },
+      { key: "dim3", title: "Subsidiarity", weight: 0.25 }
+    ];
+
+    const scoreFields = document.getElementById("scoreFields");
+
+    dimensions.forEach((dim) => {
+      const data = existing[dim.key] || {};
+      const section = document.createElement("section");
+      section.className = "section";
+      section.innerHTML = `
+        <h3 class="sectionTitle">${dim.title}</h3>
+        <p class="sectionHint">Weight: ${dim.weight}</p>
+
+        <label class="formLabel">Score</label>
+        <select class="formInput" name="${dim.key}_score">
+          <option value="">Select a score</option>
+          <option value="1" ${data.score == 1 ? "selected" : ""}>1</option>
+          <option value="2" ${data.score == 2 ? "selected" : ""}>2</option>
+          <option value="3" ${data.score == 3 ? "selected" : ""}>3</option>
+          <option value="4" ${data.score == 4 ? "selected" : ""}>4</option>
+          <option value="5" ${data.score == 5 ? "selected" : ""}>5</option>
+        </select>
+
+        <label class="formLabel">Justification for score</label>
+        <textarea class="formTextarea" name="${dim.key}_justification" rows="4" placeholder="Explain why you selected this score">${data.justification || ""}</textarea>
+      `;
+      scoreFields.appendChild(section);
+    });
+
+    document.getElementById("scoringForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+
+      dimensions.forEach((dim) => {
+        saved[dim.key] = {
+          ...(saved[dim.key] || {}),
+          title: dim.title,
+          weight: dim.weight,
+          score: Number(fd.get(`${dim.key}_score`) || 0),
+          justification: fd.get(`${dim.key}_justification`) || ""
+        };
+      });
+
+      localStorage.setItem(storageKey, JSON.stringify(saved));
+      location.href = `assess-wcbs-review.html?${qp}`;
+    });
+  </script>
+  <script src="regions.js"></script>
+  <script src="nap.js"></script>
+  <script>NAP.shell({ page: "criterion", crumbs: [["Overview","index.html"],["Assess","assess-wider-community-benefits-sharing.html"],"Scoring"] });</script>
+</body>
+</html>
