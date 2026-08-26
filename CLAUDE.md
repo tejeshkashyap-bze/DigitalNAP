@@ -18,11 +18,13 @@ client-side:
 | `map.html` | Clickable map; pins are rendered from `regions.js` |
 | `city.html` | A region: theme averages, then indicators in an accordion |
 | `CSC.html` | Criteria library; can show the mean per indicator across regions |
-| `criterion.html`, `learn.html`, `assess*.html`, `previous.html` | Indicator detail pages |
+| `criterion.html` | One indicator, for one region — four tabs: Evidence, Grading scale, How it's assessed, Previous rounds. Where a row on `city.html` goes |
+| `learn.html`, `assess*.html`, `previous.html` | Older indicator detail pages |
 | `contributors.html`, `editor.html` | Contributor list; scoring editor |
 | `styles.css` | The whole design system — single stylesheet, tokens at the top |
 | `nap.js` | The site shell (header, breadcrumbs) and the shared helpers |
-| `indicator-drawer.js` | The panel that opens when an indicator is clicked |
+| `indicator-drawer.js` | **Unused.** The side panel that used to open when an indicator was clicked, replaced by `criterion.html` in August 2026. No page loads it; safe to delete |
+| `indicator-icons.js` | One line glyph per assessed indicator, plus the id → glyph map. `indicatorIcon(id)` returns the badge, or `""` for an indicator with no glyph |
 | `regions.js` | The 16 regions — key, display name, state, map position |
 | `data.js` | Criteria structure (pillars → groups → items) |
 | `scores.js` | Per-region scores, by round |

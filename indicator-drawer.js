@@ -6,18 +6,25 @@
 //
 //   DRAWER.open("energy-storage", "kwinana")
 //
+// The body is four tabs — Evidence, Grading scale, How it's assessed,
+// Previous rounds — in that order. Evidence is what the reader clicked
+// for, so it opens first; the other three are the context behind it.
+// The order and the labels come from the standalone concept page in
+// scratch/nap-concept-a-report.html.
+//
 // About the grading scale. Every signed-off evidence entry begins with
 // a paragraph titled "Indicator grading scale", followed by the
-// assessment prose. The drawer separates the two: the scale goes into
-// a collapsed block at the top, the prose becomes the evidence body.
-// Nothing is rewritten and nothing is dropped — the scale paragraph is
-// rendered verbatim, just moved into the slot it belongs in. This was
-// checked against all 87 rounds in the four evidence files: in every
-// one the scale is paragraph 0 and carries that exact prefix, so the
-// split is deterministic rather than a guess.
+// assessment prose. The drawer separates the two: the scale becomes the
+// "Grading scale" tab, the prose becomes the Evidence tab. Nothing is
+// rewritten and nothing is dropped — the scale paragraph is rendered
+// verbatim, just moved into the slot it belongs in. This was checked
+// against all 87 rounds in the four evidence files: in every one the
+// scale is paragraph 0 and carries that exact prefix, so the split is
+// deterministic rather than a guess.
 //
 // If a future evidence entry does not follow that shape, its first
-// paragraph simply stays in the body where it was written.
+// paragraph simply stays in the body where it was written, and the
+// Grading scale tab falls back to the structured scale in learn-data.js.
 
 const DRAWER = (function () {
 
@@ -106,12 +113,67 @@ const DRAWER = (function () {
     }).join("");
   }
 
-  function fold(label, inner, open) {
-    return `<div class="dFold">` +
-      `<button class="dFoldBtn" type="button" aria-expanded="${!!open}">` +
-        `${NAP.esc(label)}<span class="pCar"></span></button>` +
-      `<div class="dFoldBody${open ? " open" : ""}">${inner}</div>` +
+  // ── tabs ──────────────────────────────────────────────────────────────
+  // Evidence first: it is what the reader clicked the row for. The other
+  // three are the context behind it, in the order the concept page used.
+  const TABS = [
+    ["evidence", "Evidence"],
+    ["scale",    "Grading scale"],
+    ["method",   "How it's assessed"],
+    ["history",  "Previous rounds"],
+  ];
+
+  function tabStrip() {
+    return `<div class="tabs" role="tablist">` +
+      TABS.map(([key, label], i) =>
+        `<button class="tab" type="button" role="tab" data-tab="${key}" ` +
+        `id="dTab-${key}" aria-controls="dPane-${key}" ` +
+        `aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">` +
+        `${NAP.esc(label)}</button>`
+      ).join("") +
     `</div>`;
+  }
+
+  function pane(key, inner, first) {
+    return `<div class="pane" role="tabpanel" id="dPane-${key}" ` +
+      `aria-labelledby="dTab-${key}"${first ? "" : " hidden"}>${inner}</div>`;
+  }
+
+  function sub(name) { return `<div class="dSecName">${NAP.esc(name)}</div>`; }
+
+  // "How it's assessed" — the methodology held in learn-data.js, trimmed to
+  // what reads well in a 520px panel. The weighting table and the full
+  // scoring-description table are seven columns wide, so they stay on the
+  // methodology page and the tab links out to it.
+  function methodPane(id, qp) {
+    const d = (typeof LEARN_DATA !== "undefined") ? LEARN_DATA[id] : null;
+    if (!d) {
+      return `<div class="note">No methodology has been recorded for this ` +
+        `indicator yet.</div>`;
+    }
+    const out = [];
+    if (d.purpose) {
+      out.push(sub("Purpose"), `<div class="dProse"><p>${d.purpose}</p></div>`);
+    }
+    if (d.frameworkIntro || (d.frameworkItems || []).length) {
+      out.push(sub("Assessment framework"), `<div class="dProse">` +
+        (d.frameworkIntro ? `<p>${d.frameworkIntro}</p>` : "") +
+        ((d.frameworkItems || []).length
+          ? `<ul>${d.frameworkItems.map(f => `<li>${f}</li>`).join("")}</ul>` : "") +
+      `</div>`);
+    }
+    if ((d.dataSources || []).length) {
+      out.push(sub("Data sources"), `<div class="dProse"><ul>` +
+        d.dataSources.map(x => `<li>${x}</li>`).join("") + `</ul></div>`);
+    }
+    if ((d.scoringProcess || []).length) {
+      out.push(sub("Scoring process"), `<div class="dProse"><ol>` +
+        d.scoringProcess.map(x => `<li><strong>${NAP.esc(x.label)}</strong> — ${x.desc}</li>`).join("") +
+      `</ol></div>`);
+    }
+    out.push(`<div class="dLinks"><a class="btn" href="learn.html?${qp}">` +
+      `Full methodology, including the weighting table</a></div>`);
+    return out.join("");
   }
 
   function acrossRegions(id, current) {
@@ -146,63 +208,91 @@ const DRAWER = (function () {
 
     const parts = [];
 
-    // score
+    // score — the tab strip carries the rule under it, so this one is flush
     parts.push(
-      `<div class="dScore">` + NAP.sBox(score, "lg") +
+      `<div class="dScore flush">` + NAP.sBox(score, "lg") +
       `<div><div class="dScoreWord">${NAP.esc(NAP.word(score))}</div>` +
       `<div class="dScoreMeta">${NAP.esc(rName)}${latest ? " · " + NAP.esc(latest.date)
         : (round ? " · " + NAP.esc(round.date) : "")}</div></div></div>`
     );
 
-    // grading scale
-    const learnScale = scaleFromLearnData(id, score);
-    if (scale) {
-      parts.push(`<div class="dSec">${fold("Indicator grading scale", `<div class="dProse">${scale}</div>`)}</div>`);
-    } else if (learnScale) {
-      parts.push(`<div class="dSec">${fold("Indicator grading scale", learnScale)}</div>`);
-    }
+    parts.push(tabStrip());
 
-    // evidence
-    parts.push(`<div class="dSec"><div class="dSecName">Evidence</div>`);
+    // 1. evidence
+    let evidenceInner;
     if (body.length) {
-      parts.push(`<div class="dProse">` +
+      evidenceInner = `<div class="dProse">` +
         body.map(p => p.trim().startsWith("<") ? p : `<p>${p}</p>`).join("") +
-      `</div>`);
+      `</div>`;
     } else if (typeof score === "number") {
-      parts.push(`<div class="note">This indicator is scored but has no evidence text recorded yet.</div>`);
+      evidenceInner = `<div class="note">This indicator is scored but has no ` +
+        `evidence text recorded yet.</div>`;
     } else {
-      parts.push(`<div class="note">Not yet assessed in ${NAP.esc(rName)}.</div>`);
+      evidenceInner = `<div class="note">Not yet assessed in ${NAP.esc(rName)}.</div>`;
     }
-    parts.push(`</div>`);
+    parts.push(pane("evidence", evidenceInner, true));
 
-    // earlier rounds
+    // 2. grading scale — the signed-off wording if there is one, otherwise the
+    //    structured scale from learn-data.js with this region's band marked
+    const learnScale = scaleFromLearnData(id, score);
+    parts.push(pane("scale",
+      scale ? `<div class="dProse">${scale}</div>`
+        : (learnScale || `<div class="note">No grading scale has been recorded ` +
+           `for this indicator yet.</div>`)));
+
+    // 3. how it's assessed
+    parts.push(pane("method", methodPane(id, qp)));
+
+    // 4. previous rounds
+    let historyInner;
     if (rounds.length > 1) {
-      const older = rounds.slice(1).map(r =>
+      historyInner = rounds.slice(1).map(r =>
         `<div class="scaleRow">` + NAP.sBox(r.score) +
         `<div><div class="scaleLabel">${NAP.esc(r.date)}</div>` +
         `<div class="scaleChars">${NAP.esc(NAP.word(r.score))}</div></div></div>`
-      ).join("");
-      parts.push(`<div class="dSec"><div class="dSecName">Earlier rounds</div>${older}</div>`);
+      ).join("") +
+      `<div class="dLinks"><a class="btn" href="previous.html?${qp}">Full history</a></div>`;
+    } else if (rounds.length === 1) {
+      historyInner = `<div class="note">${NAP.esc(latest.date)} is the only round ` +
+        `recorded for this indicator in ${NAP.esc(rName)}.</div>`;
+    } else {
+      historyInner = `<div class="note">No rounds recorded for this indicator in ` +
+        `${NAP.esc(rName)}.</div>`;
     }
+    parts.push(pane("history", historyInner));
 
-    // across regions
+    // context that belongs to every tab, so it sits below them
     parts.push(`<div class="dSec"><div class="dSecName">This indicator across regions</div>` +
       acrossRegions(id, region) + `</div>`);
-
-    // links out
-    parts.push(`<div class="dLinks">` +
-      `<a class="btn" href="learn.html?${qp}">Methodology</a>` +
-      (rounds.length ? `<a class="btn" href="previous.html?${qp}">Full history</a>` : "") +
-    `</div>`);
 
     el.body.innerHTML = parts.join("");
     el.body.scrollTop = 0;
 
-    el.body.querySelectorAll(".dFoldBtn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const open = btn.getAttribute("aria-expanded") === "true";
-        btn.setAttribute("aria-expanded", String(!open));
-        btn.nextElementSibling.classList.toggle("open", !open);
+    wireTabs();
+  }
+
+  function wireTabs() {
+    const tabs = [...el.body.querySelectorAll(".tab")];
+    const panes = [...el.body.querySelectorAll(".pane")];
+
+    function show(key) {
+      tabs.forEach(t => {
+        const on = t.dataset.tab === key;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+      });
+      panes.forEach(p => { p.hidden = p.id !== `dPane-${key}`; });
+    }
+
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => show(t.dataset.tab));
+      t.addEventListener("keydown", e => {
+        const step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!step) return;
+        e.preventDefault();
+        const next = tabs[(i + step + tabs.length) % tabs.length];
+        next.focus();
+        show(next.dataset.tab);
       });
     });
   }

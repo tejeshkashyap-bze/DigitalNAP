@@ -961,6 +961,14 @@ html[data-ramp="traffic"] {
   border-bottom: 1px solid var(--line-soft);
 }
 
+/* The drawer's score block sits directly above the tab strip, which has its
+   own rule — a second one here would read as a double line. criterion.html
+   still uses the bordered .dScore on its own. */
+.dScore.flush {
+  border-bottom: 0;
+  padding-bottom: 4px;
+}
+
 .dScoreWord {
   font-size: 16px;
   font-weight: 650;
@@ -971,6 +979,20 @@ html[data-ramp="traffic"] {
   color: var(--ink-3);
   margin-top: 2px;
 }
+
+/* The tab component itself lives in section 16. In the drawer the four
+   labels have to fit 520px, so they are tightened here. */
+
+.drawer .tabs { margin-top: 14px; }
+
+.drawer .tab {
+  margin-right: 14px;
+  padding: 11px 1px;
+  font-size: 12.5px;
+  letter-spacing: -.005em;
+}
+
+.drawer .pane { padding-top: 18px; }
 
 .dSec { padding: 20px 0 0; }
 
@@ -995,7 +1017,8 @@ html[data-ramp="traffic"] {
 
 .dProse strong { color: var(--ink); }
 
-.dProse ul {
+.dProse ul,
+.dProse ol {
   margin: 0 0 12px;
   padding-left: 20px;
 }
@@ -1619,7 +1642,234 @@ html[data-ramp="traffic"] {
 }
 
 /* ---------------------------------------------------------
-   16. Utilities
+   16. Indicator page — tabs, prose, aside
+   ---------------------------------------------------------
+
+   criterion.html: one indicator, for one region. The evidence and the
+   context behind it sit in tabs down the main column; the score and the
+   comparisons sit in the aside. The tab classes here are shared with the
+   drawer, which overrides the sizing in section 9. */
+
+.iPage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 0 48px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .iPage { grid-template-columns: minmax(0, 1fr); }
+  .iAside {
+    border-left: 0;
+    padding-left: 0;
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+}
+
+.iSub {
+  font-size: 13.5px;
+  color: var(--ink-3);
+  margin-top: 6px;
+}
+
+/* The indicator badge, beside the heading. One line glyph per assessed
+   indicator, from indicator-icons.js. Quiet on purpose — the score chip
+   in the aside is the loud mark on this page. */
+
+.iHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.iBadge {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--wash);
+  color: var(--blue);
+}
+
+.iBadge svg { width: 28px; height: 28px; }
+
+@media (max-width: 560px) {
+  .iBadge { width: 44px; height: 44px; border-radius: 13px; }
+  .iBadge svg { width: 22px; height: 22px; }
+  .iHead { gap: 14px; }
+}
+
+/* An indicator BZE has not assessed anywhere yet: no tabs, because there
+   is nothing behind them, and a request for help instead. */
+
+.iCallout {
+  border: 1px solid var(--line);
+  border-radius: var(--rl);
+  background: var(--wash);
+  padding: 30px 32px;
+  max-width: 68ch;
+}
+
+.iCalloutTitle {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  margin: 0 0 14px;
+}
+
+.iCalloutActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 24px;
+}
+
+.iCalloutActions .mailTo {
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+/* Tabs. The strip scrolls sideways rather than wrapping, so a longer
+   label in future degrades instead of stacking onto a second line. */
+
+.tabs {
+  display: flex;
+  margin-top: 26px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  flex: none;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-right: 26px;
+  padding: 12px 2px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.tab:last-child { margin-right: 0; }
+
+.tab:hover { color: var(--ink-2); }
+
+.tab[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--blue);
+}
+
+.pane { padding-top: 24px; }
+
+.pane[hidden] { display: none; }
+
+/* Assessment prose at page width. The drawer's .dProse is the same
+   material at panel width. */
+
+.iProse {
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--ink-2);
+  max-width: 68ch;
+}
+
+.iProse p { margin: 0 0 14px; }
+
+.iProse p:last-child { margin-bottom: 0; }
+
+.iProse strong { color: var(--ink); }
+
+.iProse ul,
+.iProse ol {
+  margin: 0 0 14px;
+  padding-left: 22px;
+}
+
+.iProse li { margin-bottom: 8px; }
+
+.iProse li:last-child { margin-bottom: 0; }
+
+/* Sub-headings inside a tab — the sections of the methodology. */
+.iSubHead {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 30px 0 12px;
+}
+
+.pane > .iSubHead:first-child { margin-top: 0; }
+
+/* The aside. */
+
+.iAside {
+  border-left: 1px solid var(--line);
+  padding-left: 28px;
+}
+
+.iAsideTitle {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 14px;
+}
+
+.iAsideTitle.spaced { margin-top: 30px; }
+
+.iScoreBig {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.iScoreWord {
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.iFacts { margin-top: 24px; }
+
+.iFactRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 13px;
+}
+
+.iFactRow:last-child { border-bottom: 0; }
+
+.iFactLabel { color: var(--ink-3); }
+
+.iFactValue {
+  font-weight: 600;
+  text-align: right;
+}
+
+/* The across-regions rows are reused from the drawer; there is no room
+   for the band name in a 300px column, so the chip carries it. */
+.iAside .xWord { display: none; }
+
+.iAside .xRow { padding: 9px 0; }
+
+/* ---------------------------------------------------------
+   17. Utilities
    --------------------------------------------------------- */
 
 .srOnly {

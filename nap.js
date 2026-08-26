@@ -83,6 +83,17 @@ const NAP = (function () {
     return REGIONS.filter(r => isAssessed(r.key));
   }
 
+  // Has this indicator been scored in any region, in any round? Two things
+  // key off this: whether the indicator page carries a badge, and whether
+  // it shows the call for expertise instead of empty tabs. An indicator
+  // scored in a newer region but not an older one counts as assessed, so
+  // the older region's page keeps its ordinary "not yet assessed here".
+  function isIndicatorAssessed(id) {
+    if (typeof SCORES === "undefined") return false;
+    return Object.values(SCORES).some(rounds =>
+      (rounds || []).some(r => typeof (r.scores || {})[id] === "number"));
+  }
+
   function coverage(key) {
     const r = latestRound(key);
     return {
@@ -160,6 +171,68 @@ const NAP = (function () {
       `</nav>`;
   }
 
+  /* ---------- the call for help ---------- */
+
+  // Shown wherever there is nothing to publish yet: an indicator BZE has
+  // not developed, or one that is scored but whose methodology has not been
+  // written up. It lives here because criterion.html and learn.html both
+  // need it, and the wording should exist in exactly one place.
+  //
+  // `ask` completes "…would like to help " — so it carries the verb phrase,
+  // which differs between the two cases.
+
+  const VOLUNTEER_URL = "https://www.bze.org.au/about-us/volunteer";
+  const CONTACT_EMAIL = "info@bze.org.au";
+
+  function helpCallout(heading, paragraphs, ask) {
+    return `<div class="iCallout">` +
+      `<h2 class="iCalloutTitle">${esc(heading)}</h2>` +
+      `<div class="iProse">` +
+        (paragraphs || []).map(t => `<p>${t}</p>`).join("") +
+        `<p>Much of the National Action Plan has been developed by people ` +
+        `contributing expertise from their own field. If you work in this ` +
+        `area and would like to ${esc(ask)}, we would like to hear from ` +
+        `you.</p>` +
+      `</div>` +
+      `<div class="iCalloutActions">` +
+        `<a class="btn primary" href="${VOLUNTEER_URL}" target="_blank" ` +
+          `rel="noopener">Volunteer with BZE</a>` +
+        `<span class="mailTo">or email ` +
+          `<a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></span>` +
+      `</div>` +
+    `</div>`;
+  }
+
+  // The two cases, so neither page has to decide the wording itself.
+  function undevelopedCallout(item) {
+    return helpCallout(
+      "We have not developed this indicator yet",
+      [`${esc(item.title)} is part of the assessment framework, but we have ` +
+       `not yet built the methodology behind it or assessed any region ` +
+       `against it.`],
+      "help us develop this indicator");
+  }
+
+  // Counted across every round, so the number always agrees with
+  // isIndicatorAssessed() above — an indicator scored in an earlier round
+  // but not the latest one still counts.
+  function regionsScoring(id) {
+    if (typeof SCORES === "undefined") return 0;
+    return Object.values(SCORES).filter(rounds =>
+      (rounds || []).some(r => typeof (r.scores || {})[id] === "number")).length;
+  }
+
+  function noMethodCallout(item) {
+    const n = regionsScoring(item.id);
+    return helpCallout(
+      "The methodology for this indicator is not yet published",
+      [`${esc(item.title)} has been assessed` +
+       (n ? ` in ${n} region${n === 1 ? "" : "s"}` : "") +
+       `, but the methodology behind it — what it measures, the data ` +
+       `sources and the scoring process — has not been written up here yet.`],
+      "help us document it");
+  }
+
   /* ---------- shared marks ---------- */
 
   // A score chip. `v` may be undefined for an unscored indicator.
@@ -181,7 +254,9 @@ const NAP = (function () {
   return {
     WORDS, word, esc, qs,
     allItems, itemById,
-    roundsFor, latestRound, isAssessed, assessedRegions, coverage, mean, themeSummary,
+    roundsFor, latestRound, isAssessed, isIndicatorAssessed, assessedRegions,
+    coverage, mean, themeSummary,
     shell, crumbs, sBox, legend,
+    helpCallout, undevelopedCallout, noMethodCallout, regionsScoring,
   };
 })();

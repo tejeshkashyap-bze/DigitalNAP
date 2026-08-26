@@ -49,8 +49,8 @@
         <span class="roundSummary" id="roundSummary"></span>
         <span class="pushRight"></span>
         <span class="toggle" id="filterToggle">
-          <button type="button" data-filter="all" aria-pressed="false">All</button>
           <button type="button" data-filter="scored" aria-pressed="true">Scored only</button>
+          <button type="button" data-filter="all" aria-pressed="false">All</button>
         </span>
       </div>
 
@@ -65,7 +65,6 @@
   <script src="learn-data.js"></script>
   <script src="region-overview.js"></script>
   <script src="nap.js"></script>
-  <script src="indicator-drawer.js"></script>
   <script>
     const regionKey = NAP.qs("city");
     const region    = regionByKey(regionKey);
@@ -261,7 +260,9 @@
             .filter(it => view === "all" || typeof scores[it.id] === "number")
             .map(it => {
               const v = scores[it.id];
-              return `<a class="iRow" id="${NAP.esc(it.id)}" href="#${NAP.esc(it.id)}"` +
+              const href = `criterion.html?id=${encodeURIComponent(it.id)}` +
+                `&city=${encodeURIComponent(regionKey)}`;
+              return `<a class="iRow" id="${NAP.esc(it.id)}" href="${href}"` +
                 ` data-id="${NAP.esc(it.id)}">` +
                 `<span class="iName">${NAP.esc(it.title)}</span>` +
                 `<span class="iScore">` +
@@ -296,12 +297,6 @@
         });
       });
 
-      themesEl.querySelectorAll(".iRow").forEach(row => {
-        row.addEventListener("click", e => {
-          e.preventDefault();
-          DRAWER.open(row.dataset.id, regionKey);
-        });
-      });
     }
 
     function renderAll() {
@@ -311,7 +306,9 @@
 
     renderAll();
 
-    // Deep link: city.html?city=kwinana#energy-storage opens the drawer.
+    // Deep link: city.html?city=kwinana#energy-storage opens that theme and
+    // scrolls to the row. This is how the breadcrumb back from an indicator
+    // page returns the reader to where they were.
     if (location.hash.length > 1) {
       const id = decodeURIComponent(location.hash.slice(1));
       if (NAP.itemById(id)) {
@@ -322,7 +319,6 @@
           holder.previousElementSibling.setAttribute("aria-expanded", "true");
         }
         if (row) row.scrollIntoView({ block: "center" });
-        DRAWER.open(id, regionKey);
       }
     }
   </script>

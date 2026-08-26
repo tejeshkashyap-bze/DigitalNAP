@@ -221,7 +221,95 @@
         "h": 1270,
         "dpr": 1.5
       }
+    },
+    {
+      "id": "cmt9abb6k6",
+      "seq": 6,
+      "createdAt": "2026-08-25T23:16:57.308Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=gladstone",
+      "url": "http://localhost:5173/city.html?city=gladstone",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Can the Socred only filter be first and the \"all\" filter second",
+      "target": {
+        "selector": "#filterToggle",
+        "tag": "span",
+        "elementId": "filterToggle",
+        "classes": "toggle",
+        "text": "All Scored only",
+        "html": "<span class=\"toggle\" id=\"filterToggle\"> <button type=\"button\" data-filter=\"all\" aria-pressed=\"false\">All</button> <button type=\"button\" data-filter=\"scored\" aria-pressed=\"true\">Scored only</button> </span>",
+        "ancestors": "div.wrap › div.band › div.roundBar",
+        "rect": {
+          "x": 1635.49,
+          "y": 1303.5,
+          "w": 148.84,
+          "h": 38.79
+        },
+        "styleHints": {
+          "display": "flex",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgb(243, 248, 252)",
+          "border-radius": "8px",
+          "padding": "3px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 2560,
+        "h": 1271,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmt9acv3y7",
+      "seq": 7,
+      "createdAt": "2026-08-25T23:18:09.790Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=gladstone",
+      "url": "http://localhost:5173/city.html?city=gladstone",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Add a placeholder image of Gladstone industries here. \n\nAdd an image for the Hunter, Kwinana and Port Hedland as well.",
+      "target": {
+        "selector": "#regionIntro",
+        "tag": "div",
+        "elementId": "regionIntro",
+        "classes": "regionIntro",
+        "text": "Gladstone is Central Queensland's biggest regional manufacturing and industry hub. Manufacturing employs 15% of the region's workforce, produces 67% of its exports and generates almost $9 billion annually in regional output. Gladstone is the source of over 35% of Australia's alumina production, the ",
+        "html": "<div class=\"regionIntro\" id=\"regionIntro\"> <div class=\"regionProse\" id=\"regionLede\"><p>Gladstone is Central Queensland's biggest regional manufacturing and industry hub. Manufacturing employs 15% of the region's workforce, produces 67% of its exports and generates almost $9 billion annually in regional output. Gladstone is the source of over 35% of Australia's alumina production, the Boyne Smelter is Australia's second largest aluminium production facility, and the region is home to one of Australia's largest multi-commodity ports, critical to the movement of products for global markets.</p><p>Gladstone is also one of Australia's highest-emitting industrial regions, making its decarbonisation an urgent priority. Its manufacturing emissions are driven by aluminium smelting, alumina refining, cement production and chemical manufacturing — all covered under the federal Safeguard Mechanism, and together producing 8.1 Mt of emissions annually. The region also has significant coal and LNG industries which power much of Gladstone and are exported, further increasing global emissions. Over 75% of Gladstone's industrial energy use comes from fossil fuels, primarily gas and coal.</p><p>If Gl",
+        "ancestors": "div.wrap › div.hero",
+        "rect": {
+          "x": 760.33,
+          "y": 233.05,
+          "w": 1024,
+          "h": 939.53
+        },
+        "styleHints": {
+          "display": "grid",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "0px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 2560,
+        "h": 1271,
+        "dpr": 1.5
+      }
     }
   ],
-  "updatedAt": "2026-08-24T01:20:25.989Z"
+  "updatedAt": "2026-08-25T23:18:09.790Z"
 }

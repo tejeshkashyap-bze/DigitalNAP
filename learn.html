@@ -16,6 +16,7 @@
   <script src="data.js"></script>
   <script src="scores.js"></script>
   <script src="learn-data.js"></script>
+  <script src="indicator-icons.js"></script>
   <script src="nap.js"></script>
   <script>
     const params = new URLSearchParams(location.search);
@@ -56,19 +57,22 @@
         const data = (typeof LEARN_DATA !== "undefined") ? LEARN_DATA[id] : null;
 
         if (!data) {
-          content.innerHTML = `
-            <div class="detailCard">
-              <div class="note">${pillar.pillarTitle} • ${group.groupTitle}</div>
-              <h2 class="detailTitle">${item.title}</h2>
-              <hr class="sectionDivider" />
-              <section class="section">
-                <p class="sectionText" style="color:#888; font-style:italic;">
-                  Detailed content for this indicator is coming soon.
-                  To contribute content, edit the <code>learn-data.js</code> file and add an entry for <code>"${id}"</code>.
-                </p>
-              </section>
-            </div>
-          `;
+          // 29 of the 50 indicators have no entry in learn-data.js. This used
+          // to tell the reader to edit that file, which is a note to whoever
+          // builds the site, not to the public — the repo is published. Ask
+          // for help instead, and tell the truth about which case this is:
+          // an indicator we have not developed at all, or one that is scored
+          // but whose methodology has not been written up.
+          const withIcon = typeof indicatorIcon === "function" ? indicatorIcon(id) : "";
+          content.innerHTML =
+            `<div class="hero tight"><div class="iHead">` + withIcon + `<div>` +
+              `<div class="eyebrow">${NAP.esc(pillar.pillarTitle)} · ` +
+                `${NAP.esc(group.groupTitle)}</div>` +
+              `<h1 class="wide">${NAP.esc(item.title)}</h1>` +
+            `</div></div></div>` +
+            (NAP.isIndicatorAssessed(id)
+              ? NAP.noMethodCallout(item)
+              : NAP.undevelopedCallout(item));
         } else {
           content.innerHTML = renderLearnPage(pillar, group, item, data);
         }
