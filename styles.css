@@ -25,6 +25,7 @@
     16. Indicator page — tabs, prose, aside
     17. Utilities
     18. Criteria wall — the horizontal CSC layout
+    19. References — citation markers and the source list
 
    Anything with a "legacy" note is kept because a page that
    has not been rebuilt still uses it. Don't remove those
@@ -1660,17 +1661,6 @@ html[data-ramp="traffic"] {
   align-items: start;
 }
 
-@media (max-width: 900px) {
-  .iPage { grid-template-columns: minmax(0, 1fr); }
-  .iAside {
-    border-left: 0;
-    padding-left: 0;
-    margin-top: 40px;
-    padding-top: 28px;
-    border-top: 1px solid var(--line);
-  }
-}
-
 .iSub {
   font-size: 13.5px;
   color: var(--ink-3);
@@ -1817,9 +1807,29 @@ html[data-ramp="traffic"] {
 
 /* The aside. */
 
+/* The aside starts level with the tab strip beside it rather than hard
+   under the rule above, which read as cramped.
+
+   The narrow-width override has to follow this rule rather than sit up in
+   section 16 next to .iPage. Same specificity, so whichever comes last
+   wins — and while it sat above, the aside kept its left border and left
+   padding in the stacked layout. */
+
 .iAside {
   border-left: 1px solid var(--line);
   padding-left: 28px;
+  padding-top: 32px;
+}
+
+@media (max-width: 900px) {
+  .iPage { grid-template-columns: minmax(0, 1fr); }
+  .iAside {
+    border-left: 0;
+    padding-left: 0;
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
 }
 
 .iAsideTitle {
@@ -2073,4 +2083,66 @@ html[data-ramp="traffic"] {
 @media print {
   .cscScroll { overflow: visible; }
   .cscWall { min-width: 0; gap: 12px; }
+}
+
+/* ---------------------------------------------------------
+   19. References — citation markers and the source list
+
+   The evidence text carries a marker per citation, written into
+   the evidence files as <sup class="refMark">1,2</sup>. The page
+   turns each number into a jump link at render time; the list
+   itself is built from references-<region>.js.
+   --------------------------------------------------------- */
+
+.refMark {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--blue);
+  vertical-align: super;
+  line-height: 0;
+  white-space: nowrap;
+}
+
+.refMark a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+.refMark a:hover,
+.refMark a:focus-visible { background: var(--wash); text-decoration: underline; }
+
+.iRefs {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.refList {
+  margin: 0;
+  padding-left: 24px;
+  counter-reset: none;
+}
+
+.refItem {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin-bottom: 10px;
+  scroll-margin-top: 24px;
+}
+
+.refItem:last-child { margin-bottom: 0; }
+
+.refItem.isTarget {
+  background: var(--wash);
+  border-radius: 4px;
+  box-shadow: 0 0 0 6px var(--wash);
+}
+
+.refLink {
+  color: var(--blue);
+  word-break: break-word;
 }

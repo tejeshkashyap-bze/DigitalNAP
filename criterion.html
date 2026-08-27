@@ -101,22 +101,35 @@
       } else if (city) {
         loadEvidence();
       } else {
-        draw({});
+        draw({}, {});
       }
 
       // Evidence lives in one file per region, each assigning to the same
       // window.CITY_EVIDENCE global, so it is loaded on demand rather than
       // with a script tag — the region is only known from the query string.
       function loadEvidence() {
+        loadScript(`evidence-${city}.js`, () => {
+          const ev = window.CITY_EVIDENCE || {};
+          // References are a separate file per region, and only a region
+          // whose sources have been mapped has one. A region without one
+          // still draws; its evidence simply carries no markers to resolve.
+          loadScript(`references-${city}.js`,
+            () => draw(ev, window.CITY_REFERENCES || {}),
+            () => draw(ev, {}));
+        }, () => draw({}, {}));
+      }
+
+      function loadScript(src, ok, fail) {
         const tag = document.createElement("script");
-        tag.src = `evidence-${city}.js`;
-        tag.onload  = () => draw(window.CITY_EVIDENCE || {});
-        tag.onerror = () => draw({});
+        tag.src = src;
+        tag.onload  = ok;
+        tag.onerror = fail || ok;
         document.head.appendChild(tag);
       }
 
-      function draw(evidence) {
+      function draw(evidence, references) {
         const rounds = evidence[id] || [];
+        const refs   = (references && references[id]) || [];
         const latest = rounds[0] || null;
         const { scale, body } = splitEvidence(latest);
 
@@ -125,7 +138,7 @@
           `<div class="iPage">` +
             `<div class="iMain">` +
               tabStrip() +
-              pane("evidence", evidencePane(body)) +
+              pane("evidence", evidencePane(body, refs)) +
               pane("scale", scalePane(scale)) +
               pane("method", methodPane()) +
               pane("history", historyPane(rounds)) +
@@ -134,6 +147,7 @@
           `</div>`;
 
         wireTabs();
+        wireRefJumps();
 
         // No date here on purpose. The round date in scores.js and the date
         // on the evidence entry do not always agree — Gladstone is scored in
@@ -180,11 +194,12 @@
             `<span class="iFactValue">${NAP.esc(value)}</span></div>`;
         }
 
-        function evidencePane(paras) {
+        function evidencePane(paras, refs) {
           if (paras.length) {
             return `<div class="iProse">` +
-              paras.map(p => p.trim().startsWith("<") ? p : `<p>${p}</p>`).join("") +
-            `</div>`;
+              paras.map(p => linkMarkers(
+                p.trim().startsWith("<") ? p : `<p>${p}</p>`, refs)).join("") +
+            `</div>` + refsBlock(refs);
           }
           if (!city) {
             return `<div class="note">Choose a region from ` +
@@ -307,6 +322,46 @@
             `Round-by-round detail</a></div>`;
         }
 
+        // The evidence files carry a plain marker per citation —
+        // <sup class="refMark">1,2</sup>, written where the report put it.
+        // Each number becomes a jump link to its entry in the list below,
+        // but only when this region has a reference list and the numbers
+        // resolve; otherwise the marker stays exactly as it was written.
+        function linkMarkers(html, refs) {
+          if (!refs.length) return html;
+          const have = new Set(refs.map(r => String(r.n)));
+          return html.replace(/<sup class="refMark">([\d,]+)<\/sup>/g, (m, list) => {
+            const nums = list.split(",");
+            if (!nums.every(n => have.has(n))) return m;
+            return `<sup class="refMark">` + nums.map(n =>
+              `<a data-ref="${n}" tabindex="0" role="link" ` +
+              `title="Jump to reference ${n}">${n}</a>`).join(",") + `</sup>`;
+          });
+        }
+
+        // The sources behind this indicator, numbered 1 upward in the order
+        // a reader meets them. `report` on each entry is the number the
+        // printed report used; it is kept in the data for traceability and
+        // deliberately not shown. Link text is the host, so a long address
+        // cannot break the line — the full URL is the link's title.
+        function refsBlock(refs) {
+          if (!refs.length) return "";
+          return `<div class="iRefs">` +
+            `<div class="iSubHead">References</div>` +
+            `<ol class="refList">` +
+            refs.map(r =>
+              `<li class="refItem" id="ref-${r.n}">${NAP.esc(r.cite)}` +
+              (r.url ? ` <a class="refLink" href="${NAP.esc(r.url)}" target="_blank" ` +
+                `rel="noopener" title="${NAP.esc(r.url)}">${NAP.esc(host(r.url))}</a>` : "") +
+              `</li>`).join("") +
+            `</ol></div>`;
+        }
+
+        function host(url) {
+          try { return new URL(url).host.replace(/^www\./, ""); }
+          catch (e) { return url; }
+        }
+
         function head(name) {
           return `<div class="iSubHead">${NAP.esc(name)}</div>`;
         }
@@ -347,6 +402,29 @@
       const active = initialTab();
       return `<div class="pane" role="tabpanel" id="pane-${key}" ` +
         `aria-labelledby="tab-${key}"${key === active ? "" : " hidden"}>${inner}</div>`;
+    }
+
+    // A marker scrolls to its entry and marks it rather than setting a
+    // hash — the tab strip already owns the hash, and a #ref-1 in the URL
+    // would send a reload to the wrong tab.
+    function wireRefJumps() {
+      if (!document.querySelector(".iRefs")) return;
+
+      function go(n) {
+        const li = document.getElementById(`ref-${n}`);
+        if (!li) return;
+        document.querySelectorAll(".refItem.isTarget")
+          .forEach(x => x.classList.remove("isTarget"));
+        li.classList.add("isTarget");
+        li.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      document.querySelectorAll(".refMark a").forEach(a => {
+        a.addEventListener("click", () => go(a.dataset.ref));
+        a.addEventListener("keydown", e => {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(a.dataset.ref); }
+        });
+      });
     }
 
     function wireTabs() {

@@ -29,6 +29,7 @@ client-side:
 | `data.js` | Criteria structure (pillars → groups → items) |
 | `scores.js` | Per-region scores, by round |
 | `learn-data.js`, `evidence-*.js` | Methodology and evidence content (large) |
+| `references-*.js` | One list of sources per indicator, per assessed region. Pairs with the citation markers in the evidence text — see *Citations and references* |
 
 The design came from `scratch/nap-concept-a-report.html` and was folded into
 `styles.css` in August 2026. That concept file is the reference for how the
@@ -81,6 +82,42 @@ page. It loads only `data.js`, `learn-data.js`, `indicator-icons.js` and
    `--sN`, so a mark never has to guess which fills are light — change a
    colour and its ink travels with it.
 8. Australian English in all copy (organise, prioritise, colour).
+
+## Citations and references
+
+The reports cite their sources with numbered endnotes. Those citations were
+carried into the site in August 2026 for the two published regions, Hunter
+Valley and Gladstone, in two halves:
+
+- **In the evidence text** — a marker per citation, written as
+  `<sup class="refMark">1,2</sup>` at the point the report put it. Nothing
+  else in the evidence prose changed: strip the markers and the file is
+  byte-for-byte what was signed off.
+- **In `references-<region>.js`** — `window.CITY_REFERENCES`, keyed by
+  indicator id, one list per indicator. Entries are numbered from 1 within
+  each indicator, in the order a reader meets them, so a marker's number is
+  a position in that indicator's list and nothing more. `report` on each
+  entry keeps the number the printed report used, for tracing an entry back
+  to the PDF; it is data only and is never shown.
+
+`criterion.html` renders the list under the assessment on the Evidence tab
+and turns each marker into a jump link. It does not use the URL hash for
+that — the tab strip owns the hash. `previous.html` renders the same list
+under the latest round only; an older round keeps its markers unresolved
+rather than borrowing a newer list. A region with no `references-` file
+draws exactly as before.
+
+Kwinana and Port Hedland have no reference file yet, so both pages probe for
+one and get a 404 in the console — the same optional-file pattern as the
+region photo slot, and not a fault to chase.
+
+When a new region's report is brought in, both halves have to move together.
+A marker whose number has no entry is left as plain text rather than linked,
+so a half-finished import degrades quietly rather than rendering a dead link.
+
+One thing to watch: `editor.html` writes evidence paragraphs back through
+Quill. An entry edited there could lose its markers, and nothing checks for
+that yet.
 
 ## The review loop
 

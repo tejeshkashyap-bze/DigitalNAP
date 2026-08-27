@@ -103,6 +103,35 @@ real pages:
   photograph of the region. `scratch/make-region-placeholders.py` regenerates
   them (needs Pillow, dev-only; the site still has no dependencies).
 
+### August 2026, third round — citations
+
+The two published reports cite their sources with numbered endnotes (101 in
+the Hunter, 169 in Gladstone) and none of that had been carried into the site;
+the house convention strips citations when evidence text is written up. Both
+regions now carry them, in two halves:
+
+- A `<sup class="refMark">n</sup>` marker sits in the evidence prose wherever
+  the report placed a citation — 95 in the Hunter, 114 in Gladstone. Strip the
+  markers and both evidence files are byte-for-byte what was signed off; no
+  assessment prose was rewritten.
+- `references-hunter-valley.js` and `references-gladstone.js` hold the source
+  lists (`window.CITY_REFERENCES`), one per indicator: 99 and 136 entries.
+  Numbering restarts at 1 for each indicator, in the order a reader meets the
+  markers, and each entry keeps the report's own number in `report:` so it can
+  be traced back to the PDF.
+
+`criterion.html` renders the list under the assessment on the Evidence tab and
+turns each marker into a jump link, without touching the URL hash — the tab
+strip owns that. `previous.html` renders the same list under the latest round
+only. `styles.css` has a new section 19 for both. Kwinana and Port Hedland have
+no reference file, so their pages probe for one, get a 404 and draw exactly as
+before — the same optional-file pattern as the region photo slot.
+
+`REFERENCES-IMPORT-NOTES.md` records the judgement calls: the 18 Gladstone
+citations that had no home in the evidence text, and a list of typos and
+duplicated passages noticed in both reports along the way. Nothing there was
+"fixed" in the published text.
+
 All seven comments in `review/comments.json` are marked `done` and the file is
 waiting on my **Clear** in the overlay, which is the reviewer's call.
 
@@ -175,6 +204,19 @@ indicator ids.
     redrawn; the rest were checked at both 56px and 22px.
 14. **The glyphs could also go on the region-page rows.** They're legible at
     22px. Not done — the badge is only on the indicator page.
+
+15. **Eighteen Gladstone citations have no home.** They sit on report
+    sentences the published evidence text does not carry — a closing
+    recommendation, a pull-quote, a Key findings block, and the whole hydrogen
+    export paragraph. Either the evidence is missing material or the report
+    cites more than the assessment leans on. Listed in
+    `REFERENCES-IMPORT-NOTES.md`; it's a content call for me.
+16. **`editor.html` could strip the new markers.** It writes evidence
+    paragraphs back through Quill, and nothing checks that the markers survive
+    a round trip. Worth a guard before anyone edits a published entry there.
+17. **Kwinana and Port Hedland have no references yet.** Their reports were not
+    part of this round. Both halves have to move together when they are:
+    markers in the evidence text and a matching `references-<region>.js`.
 
 ## Decisions already taken
 

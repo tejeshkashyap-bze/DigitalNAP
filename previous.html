@@ -45,8 +45,9 @@
     // Score colour label map
     const SCORE_LABELS = NAP.WORDS;
 
-    function render(evidenceData) {
+    function render(evidenceData, referenceData) {
       const rounds = evidenceData?.[id] || [];
+      const refs   = referenceData?.[id] || [];
 
       const breadcrumb = (pillar && group)
         ? `<div class="note">${pillar.pillarTitle} • ${group.groupTitle} • ${cityName}</div>`
@@ -81,6 +82,7 @@
               <span style="color:#666; font-size:13px;">${round.date}${isLatest ? " <em>(latest)</em>" : ""}</span>
             </div>
             ${paras}
+            ${isLatest ? refsBlock(refs) : ""}
           </section>
         `;
       }).join('<hr class="sectionDivider" />');
@@ -95,15 +97,47 @@
       `;
     }
 
-    // Dynamically load the city-specific evidence file, then render
+    // The sources behind the current evidence text, which carries a
+    // <sup class="refMark"> marker per citation. They belong to the latest
+    // round, so only that round gets the list; an earlier round keeps its
+    // markers unresolved rather than borrowing a newer list.
+    function refsBlock(refs) {
+      if (!refs.length) return "";
+      return `<div class="iRefs">` +
+        `<div class="iSubHead">References</div>` +
+        `<ol class="refList">` +
+        refs.map(r =>
+          `<li class="refItem">${NAP.esc(r.cite)}` +
+          (r.url ? ` <a class="refLink" href="${NAP.esc(r.url)}" target="_blank" ` +
+            `rel="noopener" title="${NAP.esc(r.url)}">${NAP.esc(refHost(r.url))}</a>` : "") +
+          `</li>`).join("") +
+        `</ol></div>`;
+    }
+
+    function refHost(url) {
+      try { return new URL(url).host.replace(/^www\./, ""); }
+      catch (e) { return url; }
+    }
+
+    function loadScript(src, ok, fail) {
+      const tag = document.createElement("script");
+      tag.src = src;
+      tag.onload  = ok;
+      tag.onerror = fail || ok;
+      document.head.appendChild(tag);
+    }
+
+    // Dynamically load the city-specific evidence file, then its
+    // references if the region has them, then render.
     if (cityKey) {
-      const script   = document.createElement("script");
-      script.src     = `evidence-${cityKey}.js`;
-      script.onload  = () => render(window.CITY_EVIDENCE);
-      script.onerror = () => render(null);
-      document.head.appendChild(script);
+      loadScript(`evidence-${cityKey}.js`, () => {
+        const ev = window.CITY_EVIDENCE;
+        loadScript(`references-${cityKey}.js`,
+          () => render(ev, window.CITY_REFERENCES || null),
+          () => render(ev, null));
+      }, () => render(null, null));
     } else {
-      render(null);
+      render(null, null);
     }
   </script>
 </body>
