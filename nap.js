@@ -94,6 +94,15 @@ const NAP = (function () {
       (rounds || []).some(r => typeof (r.scores || {})[id] === "number"));
   }
 
+  // Is the methodology for this indicator published? learn-data.js holds a
+  // key per indicator and sets it to null when there is nothing to publish
+  // yet, so a truthy entry is the test. Returns false where learn-data.js
+  // has not been loaded, so a page that does not include it degrades to
+  // "not documented" rather than throwing.
+  function hasMethod(id) {
+    return typeof LEARN_DATA !== "undefined" && !!LEARN_DATA[id];
+  }
+
   function coverage(key) {
     const r = latestRound(key);
     return {
@@ -255,6 +264,7 @@ const NAP = (function () {
     WORDS, word, esc, qs,
     allItems, itemById,
     roundsFor, latestRound, isAssessed, isIndicatorAssessed, assessedRegions,
+    hasMethod,
     coverage, mean, themeSummary,
     shell, crumbs, sBox, legend,
     helpCallout, undevelopedCallout, noMethodCallout, regionsScoring,

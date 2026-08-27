@@ -1,0 +1,220 @@
+<!doctype html>
+<!-- concept: The whole framework on one screen — five theme columns of dense chips, with
+     a colour switch: colour by whether the methodology is published, or by mean score, or
+     no colour at all. A filter dims everything that is not yet documented. Densest of the
+     three; closest to a wall chart. -->
+<!-- replaces: CSC.html -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Concept 3 — Wall chart · Critical Success Criteria</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.wideWrap { max-width: 1520px; margin: 0 auto; padding: 0 28px; }
+
+.ctlBar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px;
+  padding: 12px 0 16px;
+}
+.ctlBar label { font-size: 13px; color: var(--ink-2); }
+.chk { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; }
+
+.chartScroll { overflow-x: auto; padding-bottom: 10px; }
+.chart {
+  display: grid; grid-template-columns: repeat(5, minmax(232px, 1fr));
+  gap: 14px; align-items: start; min-width: 1220px;
+}
+
+.col { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.colHead {
+  background: var(--wash); border-bottom: 1px solid var(--line);
+  padding: 12px 12px 11px; display: flex; gap: 10px; align-items: flex-start;
+}
+.tGlyph { width: 24px; height: 24px; color: var(--blue); flex: 0 0 auto; margin-top: 1px; }
+.colName { font-size: 14.5px; font-weight: 700; line-height: 1.25; }
+.colMeta { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+
+.colBody { padding: 10px; }
+.gLabel {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--ink-3);
+  margin: 10px 0 6px;
+}
+.gLabel:first-child { margin-top: 0; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 9px; border-radius: 6px; font-size: 12.5px; line-height: 1.3;
+  text-decoration: none; border: 1px solid var(--line);
+  background: #fff; color: var(--ink-2);
+}
+.chip:hover { border-color: var(--blue); color: var(--blue-deep); }
+.chipN {
+  font-size: 10px; font-weight: 700; opacity: .75;
+  font-variant-numeric: tabular-nums;
+}
+
+/* colour by methodology */
+[data-colour="method"] .chip.has {
+  background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 600;
+}
+[data-colour="method"] .chip.none {
+  background: #fff; border-style: dashed; color: var(--ink-3);
+}
+
+/* colour by mean score — reuses the site ramp tokens */
+[data-colour="score"] .chip { font-weight: 600; }
+[data-colour="score"] .chip[data-v="1"] { background: var(--s1); color: var(--s1-ink); border-color: var(--s1); }
+[data-colour="score"] .chip[data-v="2"] { background: var(--s2); color: var(--s2-ink); border-color: var(--s2); }
+[data-colour="score"] .chip[data-v="3"] { background: var(--s3); color: var(--s3-ink); border-color: var(--s3); }
+[data-colour="score"] .chip[data-v="4"] { background: var(--s4); color: var(--s4-ink); border-color: var(--s4); }
+[data-colour="score"] .chip[data-v="5"] { background: var(--s5); color: var(--s5-ink); border-color: var(--s5); }
+[data-colour="score"] .chip[data-v="-"] { background: var(--none); color: var(--ink-3); border-color: var(--none); }
+
+/* the filter */
+[data-only="1"] .chip.none { opacity: .3; }
+
+.mLegend {
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+  font-size: 12.5px; color: var(--ink-2); margin-bottom: 14px;
+}
+.mKey { display: inline-flex; align-items: center; gap: 7px; }
+.mBox {
+  width: 22px; height: 14px; border-radius: 4px;
+  background: var(--blue); border: 1px solid var(--blue);
+}
+.mBox.off { background: #fff; border: 1px dashed var(--line); }
+</style>
+</head>
+<body>
+<div class="wideWrap">
+  <div id="napCrumbs"></div>
+
+  <div class="hero tight">
+    <div class="eyebrow">Methodology</div>
+    <h1 class="wide">Critical Success Criteria</h1>
+    <p class="lede">All 50 indicators on one screen, grouped as the framework is drawn.
+      Colour them by whether the methodology is published, or by how they score on
+      average across the assessed regions.</p>
+    <div class="tiles" id="tiles"></div>
+  </div>
+
+  <div class="band">
+    <div class="secHead">
+      <h2>The criteria</h2>
+      <div class="secNote" id="secNote"></div>
+    </div>
+
+    <div class="ctlBar">
+      <label for="colourSelect">Colour by</label>
+      <select class="select" id="colourSelect">
+        <option value="method" selected>Methodology published</option>
+        <option value="score">Mean score across assessed regions</option>
+        <option value="none">Nothing — structure only</option>
+      </select>
+      <label class="chk"><input type="checkbox" id="onlyChk" />
+        Dim indicators without a methodology</label>
+    </div>
+
+    <div class="mLegend" id="legend"></div>
+
+    <div class="chartScroll">
+      <div class="chart" id="chart" data-colour="method" data-only="0"></div>
+    </div>
+  </div>
+</div>
+
+<script src="../regions.js"></script>
+<script src="../data.js"></script>
+<script src="../scores.js"></script>
+<script src="../learn-data.js"></script>
+<script src="../nap.js"></script>
+<script src="csc-names-lcaw.js"></script>
+<script>
+NAP.shell({ page: "criteria", crumbs: [["Overview", "../index.html"], "Criteria"] });
+// nap.js resolves the logo relative to the page, which is one level down here.
+document.querySelector(".markLogo").src = "../BZE Logo PNG.png";
+
+const assessed = NAP.assessedRegions();
+const items    = NAP.allItems();
+const nMethod  = items.filter(i => hasMethod(i.id)).length;
+
+document.getElementById("tiles").innerHTML = [
+  [CSC.length, "themes"],
+  [CSC.reduce((n, p) => n + p.groups.length, 0), "groups"],
+  [items.length, "indicators"],
+  [nMethod, "with methodology"],
+].map(([n, l]) => `<div class="tile"><div class="tileN">${n}</div>` +
+  `<div class="tileL">${l}</div></div>`).join("");
+
+function acrossMean(id) {
+  const vals = assessed
+    .map(r => (NAP.latestRound(r.key).scores || {})[id])
+    .filter(v => typeof v === "number");
+  return vals.length
+    ? { mean: vals.reduce((a, b) => a + b, 0) / vals.length, n: vals.length }
+    : { mean: null, n: 0 };
+}
+
+const chart  = document.getElementById("chart");
+const colSel = document.getElementById("colourSelect");
+const onlyEl = document.getElementById("onlyChk");
+const noteEl = document.getElementById("secNote");
+const legEl  = document.getElementById("legend");
+
+chart.innerHTML = CSC.map(p => {
+  const ids = p.groups.flatMap(g => g.items.map(i => i.id));
+  const doc = ids.filter(id => hasMethod(id)).length;
+
+  const body = p.groups.map(g =>
+    `<div class="gLabel">${NAP.esc(g.groupTitle)}</div><div class="chips">` +
+    g.items.map(it => {
+      const has = hasMethod(it.id);
+      const { mean } = acrossMean(it.id);
+      const v = mean === null ? "-" : String(Math.round(mean));
+      return `<a class="chip ${has ? "has" : "none"}" data-v="${v}" ` +
+        `href="../learn.html?id=${encodeURIComponent(it.id)}" ` +
+        `title="${has ? "Methodology published" : "Methodology not yet documented"}` +
+        `${mean === null ? "" : " · mean " + mean.toFixed(1)}">` +
+        `${NAP.esc(lcawTitle(it))}` +
+        (mean === null ? "" : `<span class="chipN">${mean.toFixed(1)}</span>`) + `</a>`;
+    }).join("") + `</div>`).join("");
+
+  return `<section class="col">` +
+    `<div class="colHead">${themeGlyph(p.pillarId)}<div>` +
+      `<div class="colName">${NAP.esc(p.pillarTitle)}</div>` +
+      `<div class="colMeta">${ids.length} indicators · ${doc} documented</div>` +
+    `</div></div>` +
+    `<div class="colBody">${body}</div>` +
+  `</section>`;
+}).join("");
+
+function paint() {
+  const mode = colSel.value;
+  chart.setAttribute("data-colour", mode);
+  chart.setAttribute("data-only", onlyEl.checked ? "1" : "0");
+
+  if (mode === "score") {
+    noteEl.textContent = "Scores shown are the mean across assessed regions, from " +
+      "scored indicators only.";
+    legEl.innerHTML = NAP.legend();
+  } else if (mode === "method") {
+    noteEl.textContent = `${nMethod} of ${items.length} indicators have a published ` +
+      `methodology. The number on each chip is its mean score, where it has one.`;
+    legEl.innerHTML =
+      `<span class="mKey"><span class="mBox"></span> Methodology published</span>` +
+      `<span class="mKey"><span class="mBox off"></span> Not yet documented</span>`;
+  } else {
+    noteEl.textContent = "The framework as drawn — 5 themes, 17 groups, 50 indicators.";
+    legEl.innerHTML = "";
+  }
+}
+
+colSel.addEventListener("change", paint);
+onlyEl.addEventListener("change", paint);
+paint();
+</script>
+</body>
+</html>

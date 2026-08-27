@@ -1,0 +1,220 @@
+<!doctype html>
+<!-- concept: Faithful to the printed CSC diagram — five theme columns read left to
+     right, each holding its groups as stacked blue blocks. Indicators with a published
+     methodology are inked and linked; the rest are quiet and dashed. A toggle overlays
+     the mean score without changing the layout. -->
+<!-- replaces: CSC.html -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Concept 1 — Report columns · Critical Success Criteria</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Concept-level overrides only. Nothing here belongs in styles.css until
+   the direction is chosen. */
+
+.wideWrap { max-width: 1520px; margin: 0 auto; padding: 0 28px; }
+
+.cscScroll { overflow-x: auto; padding-bottom: 8px; }
+
+.cscCols {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(228px, 1fr));
+  gap: 20px;
+  align-items: start;
+  min-width: 1180px;
+}
+
+/* ── theme column head ─────────────────────────────────────────────── */
+
+.tHead {
+  text-align: center; padding: 0 4px 14px; min-height: 132px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.tGlyph { width: 34px; height: 34px; color: var(--ink); }
+.tNum {
+  display: block; font-size: 11px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ink-3); margin: 6px 0 2px;
+}
+.tName { font-size: 17px; font-weight: 700; line-height: 1.25; }
+.tMeta { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+
+/* ── group block ───────────────────────────────────────────────────── */
+
+.gBlock { margin-bottom: 12px; border-radius: 8px; overflow: hidden; }
+.gHead {
+  background: var(--blue); color: #fff;
+  font-size: 13px; font-weight: 700; line-height: 1.3;
+  text-align: center; padding: 7px 10px;
+}
+.gList { background: #e8f2fa; padding: 8px 6px; }
+
+/* ── indicator row ─────────────────────────────────────────────────── */
+
+.ind {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 8px; border-radius: 6px;
+  font-size: 13.5px; text-decoration: none; color: var(--ink);
+  border-left: 3px solid transparent;
+}
+.ind:hover { background: #fff; }
+
+.dot {
+  flex: 0 0 auto; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--blue); box-shadow: 0 0 0 2px rgba(18,124,191,.18);
+}
+.indName { flex: 1 1 auto; }
+.indScore { flex: 0 0 auto; }
+
+/* Documented vs not. Colour is doubled with weight, the dot and the
+   dashed edge, so it never carries the distinction alone. */
+.ind.has { border-left-color: var(--blue); font-weight: 600; }
+.ind.none {
+  border-left: 3px dashed #b8cfe0; color: var(--ink-3);
+}
+.ind.none .dot {
+  background: transparent; box-shadow: inset 0 0 0 1.5px #a8c3d6;
+}
+
+.ind .sBox { transform: scale(.82); transform-origin: right center; }
+
+/* ── legend ────────────────────────────────────────────────────────── */
+
+.mLegend {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  font-size: 13px; color: var(--ink-2); margin: 0 0 18px;
+}
+.mKey { display: inline-flex; align-items: center; gap: 8px; }
+.mSwatch {
+  width: 26px; height: 12px; border-radius: 3px; background: #e8f2fa;
+  border-left: 3px solid var(--blue);
+}
+.mSwatch.off { border-left: 3px dashed #b8cfe0; }
+
+@media (max-width: 900px) {
+  .cscCols { min-width: 940px; }
+  .wideWrap { padding: 0 18px; }
+}
+</style>
+</head>
+<body>
+<div class="wideWrap">
+  <div id="napCrumbs"></div>
+
+  <div class="hero tight">
+    <div class="eyebrow">Methodology</div>
+    <h1 class="wide">Critical Success Criteria</h1>
+    <p class="lede">Five themes, the groups within them, and every indicator a region is
+      assessed against — laid out as the framework is drawn in the report. Indicators
+      with a published methodology are highlighted; select one to read it.</p>
+    <div class="tiles" id="tiles"></div>
+  </div>
+
+  <div class="band">
+    <div class="secHead">
+      <h2>The criteria</h2>
+      <div class="secNote" id="secNote"></div>
+    </div>
+
+    <div class="roundBar">
+      <label for="modeSelect">Show</label>
+      <select class="select" id="modeSelect">
+        <option value="structure" selected>Structure only</option>
+        <option value="mean">Mean across assessed regions</option>
+      </select>
+      <span class="roundSummary" id="modeNote"></span>
+    </div>
+
+    <div class="mLegend">
+      <span class="mKey"><span class="mSwatch"></span> Methodology published</span>
+      <span class="mKey"><span class="mSwatch off"></span> Not yet documented</span>
+      <span class="mKey" id="methodCount"></span>
+    </div>
+
+    <div class="cscScroll">
+      <div class="cscCols" id="cols"></div>
+    </div>
+  </div>
+</div>
+
+<script src="../regions.js"></script>
+<script src="../data.js"></script>
+<script src="../scores.js"></script>
+<script src="../learn-data.js"></script>
+<script src="../nap.js"></script>
+<script src="csc-names-lcaw.js"></script>
+<script>
+NAP.shell({ page: "criteria", crumbs: [["Overview", "../index.html"], "Criteria"] });
+// nap.js resolves the logo relative to the page, which is one level down here.
+document.querySelector(".markLogo").src = "../BZE Logo PNG.png";
+
+const assessed = NAP.assessedRegions();
+const items    = NAP.allItems();
+const nMethod  = items.filter(i => hasMethod(i.id)).length;
+
+document.getElementById("tiles").innerHTML = [
+  [CSC.length, "themes"],
+  [CSC.reduce((n, p) => n + p.groups.length, 0), "groups"],
+  [items.length, "indicators"],
+  [assessed.length, "regions assessed"],
+].map(([n, l]) => `<div class="tile"><div class="tileN">${n}</div>` +
+  `<div class="tileL">${l}</div></div>`).join("");
+
+document.getElementById("methodCount").textContent =
+  `${nMethod} of ${items.length} indicators have a published methodology`;
+
+function acrossMean(id) {
+  const vals = assessed
+    .map(r => (NAP.latestRound(r.key).scores || {})[id])
+    .filter(v => typeof v === "number");
+  return vals.length
+    ? { mean: vals.reduce((a, b) => a + b, 0) / vals.length, n: vals.length }
+    : { mean: null, n: 0 };
+}
+
+const modeEl = document.getElementById("modeSelect");
+const noteEl = document.getElementById("modeNote");
+document.getElementById("secNote").textContent =
+  "Scores shown are the mean across assessed regions, from scored indicators only.";
+
+function render() {
+  const showMean = modeEl.value === "mean";
+  noteEl.textContent = showMean ? `Averaged over ${assessed.length} assessed regions` : "";
+
+  document.getElementById("cols").innerHTML = CSC.map((p, pi) => {
+    const ids = p.groups.flatMap(g => g.items.map(i => i.id));
+    const doc = ids.filter(id => hasMethod(id)).length;
+
+    const groups = p.groups.map(g => {
+      const rows = g.items.map(it => {
+        const has = hasMethod(it.id);
+        const { mean } = acrossMean(it.id);
+        const chip = showMean
+          ? `<span class="indScore">${mean === null ? "" :
+              `<span class="sBox" data-v="${Math.round(mean)}">${mean.toFixed(1)}</span>`}</span>`
+          : "";
+        return `<a class="ind ${has ? "has" : "none"}" ` +
+          `href="../learn.html?id=${encodeURIComponent(it.id)}" ` +
+          `title="${has ? "Methodology published" : "Methodology not yet documented"}">` +
+          `<span class="dot"></span>` +
+          `<span class="indName">${NAP.esc(lcawTitle(it))}</span>${chip}</a>`;
+      }).join("");
+      return `<div class="gBlock"><div class="gHead">${NAP.esc(g.groupTitle)}</div>` +
+        `<div class="gList">${rows}</div></div>`;
+    }).join("");
+
+    return `<section class="tCol">` +
+      `<div class="tHead">${themeGlyph(p.pillarId)}` +
+        `<span class="tNum">Theme ${String(pi + 1).padStart(2, "0")}</span>` +
+        `<div class="tName">${NAP.esc(p.pillarTitle)}</div>` +
+        `<div class="tMeta">${ids.length} indicators · ${doc} documented</div>` +
+      `</div>${groups}</section>`;
+  }).join("");
+}
+
+modeEl.addEventListener("change", render);
+render();
+</script>
+</body>
+</html>

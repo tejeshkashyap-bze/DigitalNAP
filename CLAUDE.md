@@ -17,7 +17,7 @@ client-side:
 | `index.html` | Overview — national coverage, then every region as a card |
 | `map.html` | Clickable map; pins are rendered from `regions.js` |
 | `city.html` | A region: theme averages, then indicators in an accordion |
-| `CSC.html` | Criteria library; can show the mean per indicator across regions |
+| `CSC.html` | Criteria library — the five-theme wall; can show the mean per indicator across regions |
 | `criterion.html` | One indicator, for one region — four tabs: Evidence, Grading scale, How it's assessed, Previous rounds. Where a row on `city.html` goes |
 | `learn.html`, `assess*.html`, `previous.html` | Older indicator detail pages |
 | `contributors.html`, `editor.html` | Contributor list; scoring editor |
@@ -33,6 +33,14 @@ client-side:
 The design came from `scratch/nap-concept-a-report.html` and was folded into
 `styles.css` in August 2026. That concept file is the reference for how the
 system is meant to look.
+
+`CSC.html` was rebuilt in August 2026 from
+`scratch/csc-report-columns.html`: the criteria now read as five theme
+columns laid out the way the framework is drawn in the reports, rather than
+as an accordion. Its CSS is section 18 of `styles.css`; the accordion in
+section 7 stays because `city.html` still uses it. Every indicator row
+carries `.isDoc` or `.noDoc`, from `NAP.hasMethod(id)` — a truthy entry in
+`learn-data.js` — so the page shows which methodologies are published.
 
 ### House rules
 

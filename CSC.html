@@ -7,15 +7,16 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="wrap">
+  <div class="wrap wideShell">
     <div id="napCrumbs"></div>
 
     <div class="hero tight">
       <div class="eyebrow">Methodology</div>
       <h1 class="wide">Critical Success Criteria</h1>
       <p class="lede">Five themes, the groups within them, and every indicator a region is
-        assessed against. Select an indicator to read its methodology, or compare how it
-        scores across the assessed regions.</p>
+        assessed against — laid out as the framework is drawn. Indicators with a published
+        methodology are highlighted; select one to read it, or compare how it scores across
+        the assessed regions.</p>
       <div class="tiles" id="tiles"></div>
     </div>
 
@@ -35,19 +36,30 @@
         <span class="roundSummary" id="modeNote"></span>
       </div>
 
-      <div id="themes"></div>
+      <div class="cscKeys">
+        <span class="cscKey"><span class="cscKeySwatch"></span> Methodology published</span>
+        <span class="cscKey"><span class="cscKeySwatch noDoc"></span> Not yet documented</span>
+        <span class="cscKey" id="methodCount"></span>
+      </div>
+
+      <div class="cscScroll">
+        <div class="cscWall" id="wall"></div>
+      </div>
     </div>
   </div>
 
   <script src="regions.js"></script>
   <script src="data.js"></script>
   <script src="scores.js"></script>
+  <script src="learn-data.js"></script>
+  <script src="indicator-icons.js"></script>
   <script src="nap.js"></script>
   <script>
     NAP.shell({ page: "criteria", crumbs: [["Overview", "index.html"], "Criteria"] });
 
     const assessed = NAP.assessedRegions();
     const items    = NAP.allItems();
+    const nMethod  = items.filter(i => NAP.hasMethod(i.id)).length;
 
     document.getElementById("tiles").innerHTML = [
       [CSC.length, "themes"],
@@ -56,6 +68,9 @@
       [assessed.length, "regions assessed"],
     ].map(([n, l]) => `<div class="tile"><div class="tileN">${n}</div>` +
       `<div class="tileL">${l}</div></div>`).join("");
+
+    document.getElementById("methodCount").textContent =
+      `${nMethod} of ${items.length} indicators have a published methodology`;
 
     // Mean for one indicator across every assessed region.
     function acrossMean(id) {
@@ -76,44 +91,42 @@
         ? `Averaged over ${assessed.length} assessed regions`
         : "";
 
-      document.getElementById("themes").innerHTML = CSC.map((p, pi) => {
+      document.getElementById("wall").innerHTML = CSC.map((p, pi) => {
         const ids = p.groups.flatMap(g => g.items.map(i => i.id));
-        const scoredCount = ids.filter(id => acrossMean(id).n > 0).length;
+        const scored = ids.filter(id => acrossMean(id).n > 0).length;
+        const doc    = ids.filter(id => NAP.hasMethod(id)).length;
 
         const groups = p.groups.map(g => {
           const rows = g.items.map(it => {
+            const has = NAP.hasMethod(it.id);
             const { mean, n } = acrossMean(it.id);
-            const right = showMean && mean !== null
-              ? `<span class="sWord">mean of ${n} region${n === 1 ? "" : "s"}</span>` +
-                `<span class="sBox" data-v="${Math.round(mean)}">${mean.toFixed(1)}</span>`
-              : (showMean ? `<span class="sWord">not yet scored</span>` + NAP.sBox(undefined) : "");
-            return `<a class="iRow" href="learn.html?id=${encodeURIComponent(it.id)}">` +
-              `<span class="iName">${NAP.esc(it.title)}</span>` +
-              `<span class="iScore">${right}</span></a>`;
+            const chip = showMean && mean !== null
+              ? `<span class="cscIndScore"><span class="sBox" ` +
+                `data-v="${Math.round(mean)}" aria-label="Mean ${mean.toFixed(1)} of 5 ` +
+                `across ${n} region${n === 1 ? "" : "s"}">${mean.toFixed(1)}</span></span>`
+              : "";
+            return `<a class="cscInd ${has ? "isDoc" : "noDoc"}" ` +
+              `href="learn.html?id=${encodeURIComponent(it.id)}" ` +
+              `title="${has ? "Methodology published" : "Methodology not yet documented"}">` +
+              `<span class="cscIndDot"></span>` +
+              `<span class="cscIndName">${NAP.esc(it.title)}</span>${chip}</a>`;
           }).join("");
-          return `<div class="grp"><div class="grpName">${NAP.esc(g.groupTitle)}</div>${rows}</div>`;
+          return `<div class="cscGroup">` +
+            `<div class="cscGroupHead">${NAP.esc(g.groupTitle)}</div>` +
+            `<div class="cscGroupList">${rows}</div></div>`;
         }).join("");
 
-        const isOpen = pi === 0;
-        return `<section class="pillar">` +
-          `<button class="pBtn" type="button" aria-expanded="${isOpen}">` +
-            `<span class="pIdx">${String(pi + 1).padStart(2, "0")}</span>` +
-            `<span class="pName">${NAP.esc(p.pillarTitle)}</span>` +
-            `<span class="pCount">${p.groups.length} groups · ${ids.length} indicators` +
-              (showMean ? ` · <strong>${scoredCount} with scores</strong>` : "") + `</span>` +
-            `<span class="pCar"></span>` +
-          `</button>` +
-          `<div class="pBody${isOpen ? " open" : ""}">${groups}</div>` +
-        `</section>`;
-      }).join("");
+        const meta = `${ids.length} indicators` +
+          (showMean ? ` · ${scored} scored` : "") +
+          ` · ${doc} documented`;
 
-      document.querySelectorAll(".pBtn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const on = btn.getAttribute("aria-expanded") === "true";
-          btn.setAttribute("aria-expanded", String(!on));
-          btn.nextElementSibling.classList.toggle("open", !on);
-        });
-      });
+        return `<section class="cscTheme">` +
+          `<div class="cscThemeHead">${themeIcon(p.pillarId)}` +
+            `<div class="cscThemeNum">Theme ${String(pi + 1).padStart(2, "0")}</div>` +
+            `<div class="cscThemeName">${NAP.esc(p.pillarTitle)}</div>` +
+            `<div class="cscThemeMeta">${meta}</div>` +
+          `</div>${groups}</section>`;
+      }).join("");
     }
 
     modeEl.addEventListener("change", render);

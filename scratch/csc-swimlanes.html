@@ -1,0 +1,218 @@
+<!doctype html>
+<!-- concept: Five full-width horizontal bands, one per theme, with the theme named in a
+     left rail and its groups running left to right inside the band. Indicators are pills:
+     filled where the methodology is published, outlined and dashed where it is not. No
+     horizontal scrolling — the groups wrap instead. -->
+<!-- replaces: CSC.html -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Concept 2 — Theme swimlanes · Critical Success Criteria</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.wideWrap { max-width: 1320px; margin: 0 auto; padding: 0 28px; }
+
+/* ── the band ──────────────────────────────────────────────────────── */
+
+.lane {
+  display: grid;
+  grid-template-columns: 208px 1fr;
+  gap: 24px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+}
+.lane:last-child { border-bottom: 1px solid var(--line); }
+
+.laneRail { position: sticky; top: 18px; align-self: start; }
+.tGlyph { width: 30px; height: 30px; color: var(--blue); }
+.laneNum {
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-3); margin: 8px 0 2px;
+}
+.laneName { font-size: 19px; font-weight: 700; line-height: 1.2; }
+.laneMeta { font-size: 12.5px; color: var(--ink-2); margin-top: 8px; }
+.laneBar {
+  margin-top: 8px; height: 5px; border-radius: 3px; background: var(--line-soft);
+  overflow: hidden;
+}
+.laneBar span { display: block; height: 100%; background: var(--blue); }
+
+/* ── groups inside the band ────────────────────────────────────────── */
+
+.laneGroups {
+  display: grid; align-content: start;
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  gap: 16px 20px;
+  align-items: start;
+}
+.gCol { min-width: 0; }
+.gTitle {
+  font-size: 11.5px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--blue-deep);
+  padding-bottom: 6px; margin-bottom: 8px;
+  border-bottom: 2px solid var(--blue);
+}
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── the pill ──────────────────────────────────────────────────────── */
+
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px; border-radius: 999px;
+  font-size: 13px; line-height: 1.25; text-decoration: none;
+}
+.pill.has {
+  background: #e3effa; color: var(--blue-deep);
+  border: 1px solid #a9cdea; font-weight: 600;
+}
+.pill.has:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+.pill.none {
+  background: transparent; color: var(--ink-3);
+  border: 1px dashed var(--line); 
+}
+.pill.none:hover { border-color: var(--ink-3); color: var(--ink-2); }
+.pill .sBox { transform: scale(.78); margin: -4px -4px -4px 0; }
+
+/* ── legend ────────────────────────────────────────────────────────── */
+
+.mLegend {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  font-size: 13px; color: var(--ink-2); margin: 0 0 4px;
+}
+.mKey { display: inline-flex; align-items: center; gap: 8px; }
+.mChip {
+  padding: 3px 9px; border-radius: 999px; font-size: 12px;
+  background: #e3effa; border: 1px solid #a9cdea; color: var(--blue-deep);
+  font-weight: 600;
+}
+.mChip.off {
+  background: transparent; border: 1px dashed var(--line); color: var(--ink-3);
+  font-weight: 400;
+}
+
+@media (max-width: 760px) {
+  .lane { grid-template-columns: 1fr; gap: 14px; }
+  .laneRail { position: static; }
+}
+</style>
+</head>
+<body>
+<div class="wideWrap">
+  <div id="napCrumbs"></div>
+
+  <div class="hero tight">
+    <div class="eyebrow">Methodology</div>
+    <h1 class="wide">Critical Success Criteria</h1>
+    <p class="lede">Five themes, the groups within them, and every indicator a region is
+      assessed against. Each theme runs across the page as a band; filled indicators have
+      a published methodology behind them.</p>
+    <div class="tiles" id="tiles"></div>
+  </div>
+
+  <div class="band">
+    <div class="secHead">
+      <h2>The criteria</h2>
+      <div class="secNote">Scores shown are the mean across assessed regions, from
+        scored indicators only.</div>
+    </div>
+
+    <div class="roundBar">
+      <label for="modeSelect">Show</label>
+      <select class="select" id="modeSelect">
+        <option value="structure" selected>Structure only</option>
+        <option value="mean">Mean across assessed regions</option>
+      </select>
+      <span class="roundSummary" id="modeNote"></span>
+    </div>
+
+    <div class="mLegend">
+      <span class="mKey"><span class="mChip">Transmission</span> methodology published</span>
+      <span class="mKey"><span class="mChip off">Rail</span> not yet documented</span>
+      <span class="mKey" id="methodCount"></span>
+    </div>
+
+    <div id="lanes"></div>
+  </div>
+</div>
+
+<script src="../regions.js"></script>
+<script src="../data.js"></script>
+<script src="../scores.js"></script>
+<script src="../learn-data.js"></script>
+<script src="../nap.js"></script>
+<script src="csc-names-lcaw.js"></script>
+<script>
+NAP.shell({ page: "criteria", crumbs: [["Overview", "../index.html"], "Criteria"] });
+// nap.js resolves the logo relative to the page, which is one level down here.
+document.querySelector(".markLogo").src = "../BZE Logo PNG.png";
+
+const assessed = NAP.assessedRegions();
+const items    = NAP.allItems();
+const nMethod  = items.filter(i => hasMethod(i.id)).length;
+
+document.getElementById("tiles").innerHTML = [
+  [CSC.length, "themes"],
+  [CSC.reduce((n, p) => n + p.groups.length, 0), "groups"],
+  [items.length, "indicators"],
+  [assessed.length, "regions assessed"],
+].map(([n, l]) => `<div class="tile"><div class="tileN">${n}</div>` +
+  `<div class="tileL">${l}</div></div>`).join("");
+
+document.getElementById("methodCount").textContent =
+  `${nMethod} of ${items.length} documented`;
+
+function acrossMean(id) {
+  const vals = assessed
+    .map(r => (NAP.latestRound(r.key).scores || {})[id])
+    .filter(v => typeof v === "number");
+  return vals.length
+    ? { mean: vals.reduce((a, b) => a + b, 0) / vals.length, n: vals.length }
+    : { mean: null, n: 0 };
+}
+
+const modeEl = document.getElementById("modeSelect");
+const noteEl = document.getElementById("modeNote");
+
+function render() {
+  const showMean = modeEl.value === "mean";
+  noteEl.textContent = showMean ? `Averaged over ${assessed.length} assessed regions` : "";
+
+  document.getElementById("lanes").innerHTML = CSC.map((p, pi) => {
+    const ids = p.groups.flatMap(g => g.items.map(i => i.id));
+    const doc = ids.filter(id => hasMethod(id)).length;
+    const pct = Math.round((doc / ids.length) * 100);
+
+    const groups = p.groups.map(g => {
+      const pills = g.items.map(it => {
+        const has = hasMethod(it.id);
+        const { mean } = acrossMean(it.id);
+        const chip = showMean && mean !== null
+          ? `<span class="sBox" data-v="${Math.round(mean)}">${mean.toFixed(1)}</span>` : "";
+        return `<a class="pill ${has ? "has" : "none"}" ` +
+          `href="../learn.html?id=${encodeURIComponent(it.id)}" ` +
+          `title="${has ? "Methodology published" : "Methodology not yet documented"}">` +
+          `${NAP.esc(lcawTitle(it))}${chip}</a>`;
+      }).join("");
+      return `<div class="gCol"><div class="gTitle">${NAP.esc(g.groupTitle)}</div>` +
+        `<div class="pills">${pills}</div></div>`;
+    }).join("");
+
+    return `<section class="lane">` +
+      `<div class="laneRail">${themeGlyph(p.pillarId)}` +
+        `<div class="laneNum">Theme ${String(pi + 1).padStart(2, "0")}</div>` +
+        `<div class="laneName">${NAP.esc(p.pillarTitle)}</div>` +
+        `<div class="laneMeta">${p.groups.length} groups · ${ids.length} indicators<br>` +
+          `${doc} with methodology</div>` +
+        `<div class="laneBar"><span style="width:${pct}%"></span></div>` +
+      `</div>` +
+      `<div class="laneGroups">${groups}</div>` +
+    `</section>`;
+  }).join("");
+}
+
+modeEl.addEventListener("change", render);
+render();
+</script>
+</body>
+</html>

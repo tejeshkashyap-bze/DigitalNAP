@@ -1,4 +1,8 @@
-// data.js
+// data.js — the criteria structure: five themes, their groups, and the
+// 50 indicators. Indicator names follow "Shortened LCAW CSC", the most
+// recent version of the framework diagram; the site is sentence case
+// throughout, so "Agency representation" keeps its sentence-case form.
+// Ids never change — evidence, scores and learn-data all key off them.
 const CSC = [
   {
     pillarId: "enabling-infrastructure",
@@ -8,7 +12,7 @@ const CSC = [
         groupId: "energy-system",
         groupTitle: "Energy System",
         items: [
-          { id: "renewable-energy-generation", title: "Renewables" },
+          { id: "renewable-energy-generation", title: "Renewable generation" },
           { id: "transmission-network", title: "Transmission" },
           { id: "distribution-network", title: "Distribution" },
           { id: "energy-storage", title: "Storage" },
@@ -29,7 +33,7 @@ const CSC = [
         groupId: "water-waste",
         groupTitle: "Water System & Waste Management",
         items: [
-          { id: "water-and-wastewater", title: "Water & Wastewater" },
+          { id: "water-and-wastewater", title: "Water and wastewater" },
           { id: "solid-waste-resource-recovery", title: "Solid waste" },
         ],
       },
@@ -57,13 +61,13 @@ const CSC = [
       {
         groupId: "industry-decarbonisation",
         groupTitle: "Industry Decarbonisation",
-        items: [{ id: "industry-decarbonisation-plans", title: "Decarb plans" }],
+        items: [{ id: "industry-decarbonisation-plans", title: "Decarbonisation plans" }],
       },
       {
         groupId: "workforce-capacity",
         groupTitle: "Workforce Capacity to Deliver",
         items: [
-          { id: "existing-workforce-capacity", title: "Existing capacity" },
+          { id: "existing-workforce-capacity", title: "Existing workforce capacity" },
           { id: "reskilling-upskilling", title: "Reskilling" },
         ],
       },
@@ -81,7 +85,7 @@ const CSC = [
         groupTitle: "Collaboration & Industrial Ecosystems",
         items: [
           { id: "industrial-symbiosis", title: "Symbiosis" },
-          { id: "coordinated-infrastructure-plan", title: "Common user infra" },
+          { id: "coordinated-infrastructure-plan", title: "Common user infrastructure" },
           { id: "supply-chain-resilience", title: "Supply chains" },
           { id: "international-linkages", title: "International linkages" },
         ],
@@ -121,7 +125,7 @@ const CSC = [
         groupId: "local-government-policy",
         groupTitle: "Local Government Policy",
         items: [
-          { id: "lga-decarbonisation-plans", title: "LGA decarb plans" },
+          { id: "lga-decarbonisation-plans", title: "LGA decarbonisation plans" },
           { id: "regional-adaptation-resilience", title: "Adaptation plan" },
         ],
       },

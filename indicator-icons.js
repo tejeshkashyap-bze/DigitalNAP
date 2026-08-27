@@ -1,4 +1,6 @@
-// indicator-icons.js — one line-drawn glyph per assessed indicator.
+// indicator-icons.js — the site's line-drawn glyph set: one glyph per
+// assessed indicator, plus one per theme for the criteria wall (see
+// "Theme glyphs" at the foot of this file).
 //
 // Every glyph is a 24×24 stroke drawing using currentColor, so the colour
 // comes from the stylesheet rather than from here. They are deliberately
@@ -199,4 +201,44 @@ function indicatorIcon(id) {
   return `<span class="iBadge" aria-hidden="true">` +
     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" ` +
     `stroke-linecap="round" stroke-linejoin="round">${glyph}</svg></span>`;
+}
+
+// ─── Theme glyphs ──────────────────────────────────────────────────────
+//
+// One glyph per theme, for the five columns of the criteria wall on
+// CSC.html. Same drawing conventions as the indicator glyphs above:
+// 24×24, stroke, currentColor, decorative. They echo the icons on the
+// printed framework diagram — a pylon, a plant, parliament, people, and
+// investment against a trend line.
+//
+//   themeIcon("policy-governance")  → "<svg class=\"cscGlyph\">…</svg>"
+
+const THEME_GLYPHS = {
+  "enabling-infrastructure":
+    '<path d="M12 3v18M5.5 21 12 3l6.5 18M8 10h8M6.7 15h10.6M9.4 6.5h5.2"/>',
+
+  "industry-capability-capacity":
+    '<path d="M3 20.5h18M4.5 20.5v-9l4.6 2.7v-2.7l4.6 2.7V7.5h3.4v13"/>' +
+    '<circle cx="9" cy="17.5" r="1.5"/>',
+
+  "policy-governance":
+    '<path d="M2.5 20.5h19M4.5 20.5v-8M8.2 20.5v-8M12 20.5v-8M15.8 20.5v-8' +
+    'M19.5 20.5v-8M2.5 12.5h19L12 6.5 2.5 12.5M12 6.5V3.5"/>',
+
+  "social-acceptance":
+    '<circle cx="8" cy="9" r="2.4"/><circle cx="16" cy="9" r="2.4"/>' +
+    '<path d="M3.5 19c0-2.6 2-4.4 4.5-4.4S12.5 16.4 12.5 19' +
+    'M11.5 19c0-2.6 2-4.4 4.5-4.4S20.5 16.4 20.5 19"/>',
+
+  "financing-transition":
+    '<path d="M3.5 20.5h17M7 20.5v-4.5m4.5 4.5v-8m4.5 8v-11"/>' +
+    '<path d="M4.5 11 9 6.5l3.5 2.5L20 3"/><path d="M15.6 3h4.4v4.4"/>',
+};
+
+function themeIcon(pillarId) {
+  const glyph = THEME_GLYPHS[pillarId];
+  if (!glyph) return "";
+  return `<svg class="cscGlyph" viewBox="0 0 24 24" aria-hidden="true" ` +
+    `fill="none" stroke="currentColor" stroke-width="1.4" ` +
+    `stroke-linecap="round" stroke-linejoin="round">${glyph}</svg>`;
 }
