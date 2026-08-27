@@ -224,8 +224,8 @@
         function methodPane() {
           const d = LEARN_DATA[id];
           if (!d) {
-            return `<div class="note">No methodology has been recorded for this ` +
-              `indicator yet.</div>`;
+            return `<div class="note">The methodology behind this indicator has ` +
+              `not been published yet. ${NAP.esc(NAP.V3_NOTE)}</div>`;
           }
           const out = [];
 

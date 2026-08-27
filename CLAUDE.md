@@ -17,7 +17,7 @@ client-side:
 | `index.html` | Overview — national coverage, then every region as a card |
 | `map.html` | Clickable map; pins are rendered from `regions.js` |
 | `city.html` | A region: theme averages, then indicators in an accordion |
-| `CSC.html` | Criteria library — the five-theme wall; can show the mean per indicator across regions |
+| `CSC.html` | Criteria library — the five-theme wall. Structure and methodology only; no scores |
 | `criterion.html` | One indicator, for one region — four tabs: Evidence, Grading scale, How it's assessed, Previous rounds. Where a row on `city.html` goes |
 | `learn.html`, `assess*.html`, `previous.html` | Older indicator detail pages |
 | `contributors.html`, `editor.html` | Contributor list; scoring editor |
@@ -40,7 +40,11 @@ columns laid out the way the framework is drawn in the reports, rather than
 as an accordion. Its CSS is section 18 of `styles.css`; the accordion in
 section 7 stays because `city.html` still uses it. Every indicator row
 carries `.isDoc` or `.noDoc`, from `NAP.hasMethod(id)` — a truthy entry in
-`learn-data.js` — so the page shows which methodologies are published.
+`learn-data.js` — so the page shows which methodologies are published. The
+page carries no scores at all: it is the framework and the methodology behind
+it, and scores are reported per region on `city.html` and on the indicator
+page. It loads only `data.js`, `learn-data.js`, `indicator-icons.js` and
+`nap.js` — no `scores.js`, no `regions.js`.
 
 ### House rules
 
@@ -194,6 +198,22 @@ record of what each design round asked for. Never edit or delete an archive.
 | `npm run dev:noreview` | Serve exactly what deploys — no overlay |
 | `npm run review:show` | Print current comments to the terminal |
 | `npm run review:normalise` | Dedupe + renumber after a git merge |
+
+## Indicators assessed ahead of their methodology
+
+Three indicators were scored for the first time in the August 2026 round
+(Port Hedland and Kwinana) before their methodology was published: water and
+wastewater, housing, and community engagement. Their pages say the
+methodology is due with Version 3 of the assessment process, from
+`NAP.V3_NOTE` in `nap.js` — one sentence, used by both `learn.html` (through
+`NAP.noMethodCallout`) and the "How it's assessed" tab on `criterion.html`.
+Change the wording there, not in either page.
+
+The line is tied to *assessed but not documented*, so it appears and
+disappears on its own: write an indicator up in `learn-data.js` and it goes
+away; score a new one before its methodology lands and it appears. The 26
+indicators never assessed anywhere keep the plain call for expertise
+instead — nothing is promised for them.
 
 ## Evidence and the grading scale
 

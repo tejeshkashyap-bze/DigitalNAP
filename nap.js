@@ -190,6 +190,16 @@ const NAP = (function () {
   // `ask` completes "…would like to help " — so it carries the verb phrase,
   // which differs between the two cases.
 
+  // Three indicators were assessed for the first time in the August 2026
+  // round (Port Hedland and Kwinana) ahead of their methodology being
+  // published: water and wastewater, housing, and community engagement.
+  // The methodology for those is due with the next edition of the
+  // assessment process, so the page says so rather than leaving the reader
+  // to wonder. Written once here because both learn.html and
+  // criterion.html show it.
+  const V3_NOTE = "This methodology will be added with Version 3 of the " +
+    "National Action Plan Regional Assessment Process.";
+
   const VOLUNTEER_URL = "https://www.bze.org.au/about-us/volunteer";
   const CONTACT_EMAIL = "info@bze.org.au";
 
@@ -238,7 +248,8 @@ const NAP = (function () {
       [`${esc(item.title)} has been assessed` +
        (n ? ` in ${n} region${n === 1 ? "" : "s"}` : "") +
        `, but the methodology behind it — what it measures, the data ` +
-       `sources and the scoring process — has not been written up here yet.`],
+       `sources and the scoring process — has not been written up here yet.`,
+       esc(V3_NOTE)],
       "help us document it");
   }
 
@@ -268,5 +279,6 @@ const NAP = (function () {
     coverage, mean, themeSummary,
     shell, crumbs, sBox, legend,
     helpCallout, undevelopedCallout, noMethodCallout, regionsScoring,
+    V3_NOTE,
   };
 })();

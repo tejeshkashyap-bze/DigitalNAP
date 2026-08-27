@@ -15,25 +15,15 @@
       <h1 class="wide">Critical Success Criteria</h1>
       <p class="lede">Five themes, the groups within them, and every indicator a region is
         assessed against — laid out as the framework is drawn. Indicators with a published
-        methodology are highlighted; select one to read it, or compare how it scores across
-        the assessed regions.</p>
+        methodology are highlighted; select one to read it.</p>
       <div class="tiles" id="tiles"></div>
     </div>
 
     <div class="band">
       <div class="secHead">
         <h2>The criteria</h2>
-        <div class="secNote">Scores shown are the mean across assessed regions, from scored
-          indicators only.</div>
-      </div>
-
-      <div class="roundBar">
-        <label for="modeSelect">Show</label>
-        <select class="select" id="modeSelect">
-          <option value="structure">Structure only</option>
-          <option value="mean" selected>Mean across assessed regions</option>
-        </select>
-        <span class="roundSummary" id="modeNote"></span>
+        <div class="secNote">Scores are reported per region, not here. Open a region to
+          see how it was assessed.</div>
       </div>
 
       <div class="cscKeys">
@@ -48,89 +38,55 @@
     </div>
   </div>
 
-  <script src="regions.js"></script>
   <script src="data.js"></script>
-  <script src="scores.js"></script>
   <script src="learn-data.js"></script>
   <script src="indicator-icons.js"></script>
   <script src="nap.js"></script>
   <script>
     NAP.shell({ page: "criteria", crumbs: [["Overview", "index.html"], "Criteria"] });
 
-    const assessed = NAP.assessedRegions();
-    const items    = NAP.allItems();
-    const nMethod  = items.filter(i => NAP.hasMethod(i.id)).length;
+    const items   = NAP.allItems();
+    const nMethod = items.filter(i => NAP.hasMethod(i.id)).length;
 
     document.getElementById("tiles").innerHTML = [
       [CSC.length, "themes"],
       [CSC.reduce((n, p) => n + p.groups.length, 0), "groups"],
       [items.length, "indicators"],
-      [assessed.length, "regions assessed"],
+      [nMethod, "with methodology"],
     ].map(([n, l]) => `<div class="tile"><div class="tileN">${n}</div>` +
       `<div class="tileL">${l}</div></div>`).join("");
 
     document.getElementById("methodCount").textContent =
       `${nMethod} of ${items.length} indicators have a published methodology`;
 
-    // Mean for one indicator across every assessed region.
-    function acrossMean(id) {
-      const vals = assessed
-        .map(r => (NAP.latestRound(r.key).scores || {})[id])
-        .filter(v => typeof v === "number");
-      return vals.length
-        ? { mean: vals.reduce((a, b) => a + b, 0) / vals.length, n: vals.length }
-        : { mean: null, n: 0 };
-    }
+    // The wall: five theme columns, groups stacked within each. This page is
+    // the framework and the methodology behind it — no scores. Scores are
+    // reported per region, on city.html and on the indicator page.
+    document.getElementById("wall").innerHTML = CSC.map((p, pi) => {
+      const ids = p.groups.flatMap(g => g.items.map(i => i.id));
+      const doc = ids.filter(id => NAP.hasMethod(id)).length;
 
-    const modeEl = document.getElementById("modeSelect");
-    const noteEl = document.getElementById("modeNote");
-
-    function render() {
-      const showMean = modeEl.value === "mean";
-      noteEl.textContent = showMean
-        ? `Averaged over ${assessed.length} assessed regions`
-        : "";
-
-      document.getElementById("wall").innerHTML = CSC.map((p, pi) => {
-        const ids = p.groups.flatMap(g => g.items.map(i => i.id));
-        const scored = ids.filter(id => acrossMean(id).n > 0).length;
-        const doc    = ids.filter(id => NAP.hasMethod(id)).length;
-
-        const groups = p.groups.map(g => {
-          const rows = g.items.map(it => {
-            const has = NAP.hasMethod(it.id);
-            const { mean, n } = acrossMean(it.id);
-            const chip = showMean && mean !== null
-              ? `<span class="cscIndScore"><span class="sBox" ` +
-                `data-v="${Math.round(mean)}" aria-label="Mean ${mean.toFixed(1)} of 5 ` +
-                `across ${n} region${n === 1 ? "" : "s"}">${mean.toFixed(1)}</span></span>`
-              : "";
-            return `<a class="cscInd ${has ? "isDoc" : "noDoc"}" ` +
-              `href="learn.html?id=${encodeURIComponent(it.id)}" ` +
-              `title="${has ? "Methodology published" : "Methodology not yet documented"}">` +
-              `<span class="cscIndDot"></span>` +
-              `<span class="cscIndName">${NAP.esc(it.title)}</span>${chip}</a>`;
-          }).join("");
-          return `<div class="cscGroup">` +
-            `<div class="cscGroupHead">${NAP.esc(g.groupTitle)}</div>` +
-            `<div class="cscGroupList">${rows}</div></div>`;
+      const groups = p.groups.map(g => {
+        const rows = g.items.map(it => {
+          const has = NAP.hasMethod(it.id);
+          return `<a class="cscInd ${has ? "isDoc" : "noDoc"}" ` +
+            `href="learn.html?id=${encodeURIComponent(it.id)}" ` +
+            `title="${has ? "Methodology published" : "Methodology not yet documented"}">` +
+            `<span class="cscIndDot"></span>` +
+            `<span class="cscIndName">${NAP.esc(it.title)}</span></a>`;
         }).join("");
-
-        const meta = `${ids.length} indicators` +
-          (showMean ? ` · ${scored} scored` : "") +
-          ` · ${doc} documented`;
-
-        return `<section class="cscTheme">` +
-          `<div class="cscThemeHead">${themeIcon(p.pillarId)}` +
-            `<div class="cscThemeNum">Theme ${String(pi + 1).padStart(2, "0")}</div>` +
-            `<div class="cscThemeName">${NAP.esc(p.pillarTitle)}</div>` +
-            `<div class="cscThemeMeta">${meta}</div>` +
-          `</div>${groups}</section>`;
+        return `<div class="cscGroup">` +
+          `<div class="cscGroupHead">${NAP.esc(g.groupTitle)}</div>` +
+          `<div class="cscGroupList">${rows}</div></div>`;
       }).join("");
-    }
 
-    modeEl.addEventListener("change", render);
-    render();
+      return `<section class="cscTheme">` +
+        `<div class="cscThemeHead">${themeIcon(p.pillarId)}` +
+          `<div class="cscThemeNum">Theme ${String(pi + 1).padStart(2, "0")}</div>` +
+          `<div class="cscThemeName">${NAP.esc(p.pillarTitle)}</div>` +
+          `<div class="cscThemeMeta">${ids.length} indicators · ${doc} documented</div>` +
+        `</div>${groups}</section>`;
+    }).join("");
   </script>
 </body>
 </html>

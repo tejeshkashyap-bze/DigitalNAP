@@ -1945,6 +1945,10 @@ html[data-ramp="traffic"] {
    `.isDoc` where the methodology is published and `.noDoc`
    where it is not. Colour is doubled with weight, the dot and
    the left edge, so the distinction never rests on hue alone.
+
+   No score marks here. The page is the framework and the
+   methodology behind it; scores are reported per region on
+   city.html and on the indicator page.
    --------------------------------------------------------- */
 
 /* The five-column wall needs more room than the 1080px reading
@@ -2028,7 +2032,6 @@ html[data-ramp="traffic"] {
 }
 
 .cscIndName { flex: 1 1 auto; }
-.cscIndScore { flex: 0 0 auto; }
 
 .cscInd.isDoc { border-left-color: var(--blue); font-weight: 600; }
 
@@ -2038,8 +2041,6 @@ html[data-ramp="traffic"] {
   background: transparent;
   box-shadow: inset 0 0 0 1.5px #a8c3d6;
 }
-
-.cscInd .sBox { transform: scale(.82); transform-origin: right center; }
 
 /* ── the key ── */
 
