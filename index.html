@@ -12,42 +12,26 @@
 
     <div class="hero">
       <div class="eyebrow">Beyond Zero Emissions</div>
-      <h1>Assessing Australia's industrial regions against the Critical Success Criteria</h1>
-      <p class="lede">The National Action Plan assesses each region against a shared set of
-        indicators across five themes, scoring every one from 1 to 5 against its own grading
-        scale. Each score is backed by published evidence.</p>
+      <h1>How ready is Australian industry for a clean economy?</h1>
+      <p class="lede">Australia can be a clean energy and green export superpower, but
+        that ambition only counts once it turns into built projects — region by region.
+        Most of our heavy industry sits in a handful of places, and each of them needs
+        the same things to make the shift: renewable power, transmission and ports,
+        supportive policy, skilled people, and the backing of the community around it.</p>
+      <p class="lede">The National Action Plan looks at <span id="nRegions">16</span> of
+        those industrial regions. It assesses each one against the same set of measures,
+        scores every measure from 1 to 5, and publishes the evidence behind the score.
+        Assessments have been published for <span id="nAssessed">4</span> of them so far.</p>
       <div class="tiles" id="tiles"></div>
     </div>
 
     <div class="band">
       <div class="secHead">
-        <h2>Regions</h2>
-        <div class="secNote">Assessed regions carry a coverage strip showing how much of the
-          round is scored. Select a region to read its indicators.</div>
+        <h2>Regions Assessed</h2>
+        <div class="secNote">Each assessed region carries a coverage strip showing how
+          much of the round is scored. Select a region to read its indicators.</div>
       </div>
       <div class="regions" id="regions"></div>
-    </div>
-
-    <div class="band">
-      <div class="secHead">
-        <h2>Explore</h2>
-      </div>
-      <div class="actionGrid">
-        <a class="actionCard" href="map.html">
-          <div class="actionTitle">Industrial locations</div>
-          <div class="actionDesc">The 16 regions on the map, with the score of each assessed
-            region.</div>
-        </a>
-        <a class="actionCard" href="CSC.html">
-          <div class="actionTitle">Critical Success Criteria</div>
-          <div class="actionDesc">The full criteria library — five themes, the groups within
-            them and every indicator.</div>
-        </a>
-        <a class="actionCard" href="contributors.html">
-          <div class="actionTitle">Contributors</div>
-          <div class="actionDesc">The people and organisations behind the assessments.</div>
-        </a>
-      </div>
     </div>
 
     <div class="homeFooterNote">
@@ -62,46 +46,58 @@
   <script>
     NAP.shell({ page: "overview" });
 
-    const total     = NAP.allItems().length;
-    const assessed  = NAP.assessedRegions();
-    const pairs     = assessed.length * total;
-    const scored    = assessed.reduce((n, r) => n + NAP.coverage(r.key).scored, 0);
+    const total    = NAP.allItems().length;
+    const assessed = NAP.assessedRegions();
+
+    // The two counts in the lede come from the data rather than the copy, so
+    // the sentence cannot go stale when a region is assessed.
+    document.getElementById("nRegions").textContent  = REGIONS.length;
+    document.getElementById("nAssessed").textContent = assessed.length;
 
     document.getElementById("tiles").innerHTML = [
       [REGIONS.length, "regions in scope"],
       [assessed.length, "with an assessment"],
       [total, "indicators per region"],
-      [pairs ? Math.round(scored / pairs * 100) + "<sup>%</sup>" : "–",
-        `assessed regions scored<br>${scored} of ${pairs} region–indicator pairs`],
     ].map(([n, l]) => `<div class="tile"><div class="tileN">${n}</div>` +
       `<div class="tileL">${l}</div></div>`).join("");
 
-    // Regions: assessed first, each with a coverage strip.
-    const ordered = [...REGIONS].sort((a, b) =>
-      (NAP.isAssessed(b.key) ? 1 : 0) - (NAP.isAssessed(a.key) ? 1 : 0)
-      || a.name.localeCompare(b.name));
+    // Only the assessed regions get a card. The rest are one entry at the end
+    // pointing at the map, which is where all sixteen are shown together.
+    const cards = assessed
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(r => {
+        const round = NAP.latestRound(r.key);
+        const cov   = NAP.coverage(r.key);
 
-    document.getElementById("regions").innerHTML = ordered.map(r => {
-      const round = NAP.latestRound(r.key);
-      const cov   = NAP.coverage(r.key);
-      const on    = cov.scored > 0;
+        const strip = NAP.allItems().map(i => {
+          const v = round ? round.scores[i.id] : undefined;
+          return `<span class="dot"${typeof v === "number" ? ` data-v="${v}"` : ""}></span>`;
+        }).join("");
 
-      const strip = NAP.allItems().map(i => {
-        const v = round ? round.scores[i.id] : undefined;
-        return `<span class="dot"${typeof v === "number" ? ` data-v="${v}"` : ""}></span>`;
-      }).join("");
+        return `<a class="rCard" data-status="published"` +
+          ` href="city.html?city=${encodeURIComponent(r.key)}">` +
+          `<div class="rTop"><span class="rName">${NAP.esc(r.name)}</span>` +
+            `<span class="rState">${NAP.esc(r.state)}</span></div>` +
+          `<span class="chip" data-s="published">Assessed · ${NAP.esc(round.date)}</span>` +
+          `<div class="dots">${strip}</div>` +
+          `<div class="rMeta">${cov.scored} of ${cov.total} indicators scored</div>` +
+        `</a>`;
+      });
 
-      return `<a class="rCard" data-status="${on ? "published" : "none"}"` +
-        ` href="city.html?city=${encodeURIComponent(r.key)}">` +
-        `<div class="rTop"><span class="rName">${NAP.esc(r.name)}</span>` +
-          `<span class="rState">${NAP.esc(r.state)}</span></div>` +
-        `<span class="chip" data-s="${on ? "published" : "none"}">` +
-          `${on ? "Assessed · " + NAP.esc(round.date) : "Not yet assessed"}</span>` +
-        (on ? `<div class="dots">${strip}</div>` : "") +
-        `<div class="rMeta">${on ? `${cov.scored} of ${cov.total} indicators scored`
-          : `${cov.total} indicators awaiting assessment`}</div>` +
-      `</a>`;
-    }).join("");
+    const remaining = REGIONS.length - assessed.length;
+    if (remaining > 0) {
+      cards.push(
+        `<a class="rCard" data-status="none" href="map.html">` +
+          `<div class="rTop">` +
+            `<span class="rName">Additional Regions Not Yet Assessed</span></div>` +
+          `<span class="chip" data-s="none">${remaining} regions</span>` +
+          `<div class="rMeta">In scope for the National Action Plan and awaiting ` +
+            `assessment. See all ${REGIONS.length} on the map.</div>` +
+        `</a>`);
+    }
+
+    document.getElementById("regions").innerHTML = cards.join("");
   </script>
 </body>
 </html>

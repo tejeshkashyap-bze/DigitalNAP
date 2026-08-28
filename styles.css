@@ -141,10 +141,11 @@ code {
 .container {
   max-width: var(--shell);
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  /* The bottom padding is the page's breathing room. Without it the last
+     line of a page — most visibly the last reference on an indicator page —
+     sits hard against the bottom edge of the window. */
+  padding: 0 var(--gutter) 72px;
 }
-
-.container { padding-bottom: 64px; }
 
 /* ---------------------------------------------------------
    3. Site shell — header, nav, breadcrumbs
@@ -305,6 +306,9 @@ h1.wide { max-width: none; }
   max-width: 62ch;
   margin: 0;
 }
+
+/* A lede that runs to a second paragraph. */
+.lede + .lede { margin-top: 14px; }
 
 .tiles {
   display: grid;
