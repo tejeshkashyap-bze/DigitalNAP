@@ -1,0 +1,668 @@
+{
+  "version": 1,
+  "project": "National-Action-Plan",
+  "comments": [
+    {
+      "id": "cmt6hwy711",
+      "seq": 1,
+      "createdAt": "2026-08-24T00:26:25.693Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "map.html",
+      "url": "http://localhost:5173/map.html",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "I don't want the mean score here with the regional location.",
+      "target": {
+        "selector": "img.mapImg",
+        "tag": "img",
+        "elementId": "",
+        "classes": "mapImg",
+        "text": "",
+        "html": "<img class=\"mapImg\" src=\"BZE%20REIP%20Map.png\" alt=\"Map of Australia\">",
+        "ancestors": "div.wrap › div.band › div.mapWrap",
+        "rect": {
+          "x": 132,
+          "y": 360.18,
+          "w": 998.67,
+          "h": 723.96
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "0px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmt6i1hbs2",
+      "seq": 2,
+      "createdAt": "2026-08-24T00:29:57.112Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=port-hedland",
+      "url": "http://localhost:5173/city.html?city=port-hedland",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "\"Scored only\" should be the default not the \"All\" tab",
+      "target": {
+        "selector": "#roundBar",
+        "tag": "div",
+        "elementId": "roundBar",
+        "classes": "roundBar",
+        "text": "Assessment August 2026 (latest)— no assessment — Mean 2.5 · 24 of 50 indicators scored All Scored only",
+        "html": "<div class=\"roundBar\" id=\"roundBar\" style=\"display: flex;\"> <label for=\"roundSelect\">Assessment</label> <select class=\"select\" id=\"roundSelect\"><option value=\"0\">August 2026 (latest)</option><option value=\"-1\">— no assessment —</option></select> <span class=\"roundSummary\" id=\"roundSummary\" title=\"Mean is the average across scored indicators only; unscored indicators are excluded.\">Mean <strong>2.5</strong> · 24 of 50 indicators scored</span> <span class=\"pushRight\"></span> <span class=\"toggle\" id=\"filterToggle\"> <button type=\"button\" data-filter=\"all\" aria-pressed=\"true\">All</button> <button type=\"button\" data-filter=\"scored\" aria-pressed=\"false\">Scored only</button> </span> </div>",
+        "ancestors": "div.wrap › div.band",
+        "rect": {
+          "x": 119.33,
+          "y": 606.05,
+          "w": 1024,
+          "h": 38.79
+        },
+        "styleHints": {
+          "display": "flex",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "0px",
+          "margin": "0px 0px 18px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmt6i43d93",
+      "seq": 3,
+      "createdAt": "2026-08-24T00:31:58.989Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=port-hedland",
+      "url": "http://localhost:5173/city.html?city=port-hedland",
+      "category": "colour",
+      "priority": "normal",
+      "comment": "Colour Scheme is wrong, use existing colour scheme",
+      "target": {
+        "selector": "div.scoreLegend",
+        "tag": "div",
+        "elementId": "",
+        "classes": "scoreLegend",
+        "text": "1 · Severe deficiency2 · Moderate deficiency3 · Developing4 · Effective5 · Leading practiceNot yet scored",
+        "html": "<div class=\"scoreLegend\"><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"1\"></span>1 · Severe deficiency</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"2\"></span>2 · Moderate deficiency</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"3\"></span>3 · Developing</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"4\"></span>4 · Effective</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"5\"></span>5 · Leading practice</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"-\"></span>Not yet scored</span></div>",
+        "ancestors": "div.wrap › div.band › div",
+        "rect": {
+          "x": 119.33,
+          "y": 662.84,
+          "w": 1024,
+          "h": 43.2
+        },
+        "styleHints": {
+          "display": "flex",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgb(243, 248, 252)",
+          "border-radius": "10px",
+          "padding": "12px 14px",
+          "margin": "0px 0px 18px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmt6jk44z4",
+      "seq": 4,
+      "createdAt": "2026-08-24T01:12:26.099Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=hunter-valley",
+      "url": "http://localhost:5173/city.html?city=hunter-valley",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Swap the colour for 1 and 2.",
+      "target": {
+        "selector": "div.scoreLegend",
+        "tag": "div",
+        "elementId": "",
+        "classes": "scoreLegend",
+        "text": "1 · Severe deficiency2 · Moderate deficiency3 · Developing4 · Effective5 · Leading practiceNot yet scored",
+        "html": "<div class=\"scoreLegend\"><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"1\"></span>1 · Severe deficiency</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"2\"></span>2 · Moderate deficiency</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"3\"></span>3 · Developing</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"4\"></span>4 · Effective</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"5\"></span>5 · Leading practice</span><span class=\"legendKey\"><span class=\"legendSwatch\" data-v=\"-\"></span>Not yet scored</span></div>",
+        "ancestors": "div.wrap › div.band › div",
+        "rect": {
+          "x": 119.33,
+          "y": 662.84,
+          "w": 1024,
+          "h": 43.2
+        },
+        "styleHints": {
+          "display": "flex",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgb(243, 248, 252)",
+          "border-radius": "10px",
+          "padding": "12px 14px",
+          "margin": "0px 0px 18px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmt6juef95",
+      "seq": 5,
+      "createdAt": "2026-08-24T01:20:25.989Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=hunter-valley",
+      "url": "http://localhost:5173/city.html?city=hunter-valley",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "I want this section to be an overview of the region. Something like \"The Hunter hosts the largest coal export terminal in the world and is a major industrial hub in Australia, providing a unique testbed for our framework. If we can achieve substantial\nchange in the Hunter, we can apply those\nlessons to other regions.\nThe Hunter is responsible for 11% of Australia’s domestic emissions,10 11 12 13 and the coal exported from the Port of Newcastle generates emissions overseas equivalent to 80% of Australia’s total\ndomestic emissions, according to our analysis14.\nThe region is home to coal-fired power plants, numerous coal mines, and major industrial sites such as Tomago Aluminium and Orica’s Kooragang Island operations.\nThe Hunter is one of sixteen key industrial regions we have identified as a potential Renewable Energy Industrial Precinct\" \n\nFeel free to add and remove and edit this. Also from a design picture I would like to add a image from the region somewhere here. \n\nI would like to simmilar changes to the Port Hedland, Kwinana and Gladstone pages as well. I will paste some suggested text for each in chat.",
+      "target": {
+        "selector": "div.hero.tight:nth-of-type(2)",
+        "tag": "div",
+        "elementId": "",
+        "classes": "hero tight",
+        "text": "NSW · Assessed Hunter Valley 19 of 50 indicators were scored in the April 2025 round. Theme averages are calculated from scored indicators only and will move as the round is completed. 2.0Enabling Infrastructure5/15 scored2.0Industry Capability & Capacity1/10 scored3.1Policy & Governance13/17 scored",
+        "html": "<div class=\"hero tight\"> <div class=\"eyebrow\" id=\"eyebrow\">NSW · Assessed</div> <h1 id=\"regionTitle\">Hunter Valley</h1> <p class=\"lede\" id=\"regionLede\">19 of 50 indicators were scored in the <strong>April 2025</strong> round. Theme averages are calculated from scored indicators only and will move as the round is completed.</p> <div class=\"tiles\" id=\"themeTiles\"><div class=\"tile\"><div class=\"tileN\">2.0</div><div class=\"tileL\">Enabling Infrastructure<br>5/15 scored</div></div><div class=\"tile\"><div class=\"tileN\">2.0</div><div class=\"tileL\">Industry Capability &amp; Capacity<br>1/10 scored</div></div><div class=\"tile\"><div class=\"tileN\">3.1</div><div class=\"tileL\">Policy &amp; Governance<br>13/17 scored</div></div><div class=\"tile\"><div class=\"tileN muted\">–</div><div class=\"tileL\">Social Acceptance<br>0/5 scored</div></div><div class=\"tile\"><div class=\"tileN muted\">–</div><div class=\"tileL\">Financing the Transition<br>0/3 scored</div></div></div> </div>",
+        "ancestors": "div.wrap",
+        "rect": {
+          "x": 119.33,
+          "y": 103.46,
+          "w": 1024,
+          "h": 395.01
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "30px 0px 26px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmt9abb6k6",
+      "seq": 6,
+      "createdAt": "2026-08-25T23:16:57.308Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=gladstone",
+      "url": "http://localhost:5173/city.html?city=gladstone",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Can the Socred only filter be first and the \"all\" filter second",
+      "target": {
+        "selector": "#filterToggle",
+        "tag": "span",
+        "elementId": "filterToggle",
+        "classes": "toggle",
+        "text": "All Scored only",
+        "html": "<span class=\"toggle\" id=\"filterToggle\"> <button type=\"button\" data-filter=\"all\" aria-pressed=\"false\">All</button> <button type=\"button\" data-filter=\"scored\" aria-pressed=\"true\">Scored only</button> </span>",
+        "ancestors": "div.wrap › div.band › div.roundBar",
+        "rect": {
+          "x": 1635.49,
+          "y": 1303.5,
+          "w": 148.84,
+          "h": 38.79
+        },
+        "styleHints": {
+          "display": "flex",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgb(243, 248, 252)",
+          "border-radius": "8px",
+          "padding": "3px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 2560,
+        "h": 1271,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmt9acv3y7",
+      "seq": 7,
+      "createdAt": "2026-08-25T23:18:09.790Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "city.html?city=gladstone",
+      "url": "http://localhost:5173/city.html?city=gladstone",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Add a placeholder image of Gladstone industries here. \n\nAdd an image for the Hunter, Kwinana and Port Hedland as well.",
+      "target": {
+        "selector": "#regionIntro",
+        "tag": "div",
+        "elementId": "regionIntro",
+        "classes": "regionIntro",
+        "text": "Gladstone is Central Queensland's biggest regional manufacturing and industry hub. Manufacturing employs 15% of the region's workforce, produces 67% of its exports and generates almost $9 billion annually in regional output. Gladstone is the source of over 35% of Australia's alumina production, the ",
+        "html": "<div class=\"regionIntro\" id=\"regionIntro\"> <div class=\"regionProse\" id=\"regionLede\"><p>Gladstone is Central Queensland's biggest regional manufacturing and industry hub. Manufacturing employs 15% of the region's workforce, produces 67% of its exports and generates almost $9 billion annually in regional output. Gladstone is the source of over 35% of Australia's alumina production, the Boyne Smelter is Australia's second largest aluminium production facility, and the region is home to one of Australia's largest multi-commodity ports, critical to the movement of products for global markets.</p><p>Gladstone is also one of Australia's highest-emitting industrial regions, making its decarbonisation an urgent priority. Its manufacturing emissions are driven by aluminium smelting, alumina refining, cement production and chemical manufacturing — all covered under the federal Safeguard Mechanism, and together producing 8.1 Mt of emissions annually. The region also has significant coal and LNG industries which power much of Gladstone and are exported, further increasing global emissions. Over 75% of Gladstone's industrial energy use comes from fossil fuels, primarily gas and coal.</p><p>If Gl",
+        "ancestors": "div.wrap › div.hero",
+        "rect": {
+          "x": 760.33,
+          "y": 233.05,
+          "w": 1024,
+          "h": 939.53
+        },
+        "styleHints": {
+          "display": "grid",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "0px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 2560,
+        "h": 1271,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmtbqbasb8",
+      "seq": 8,
+      "createdAt": "2026-08-27T16:20:23.003Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "criterion.html?id=renewable-energy-generation&city=hunter-valley",
+      "url": "http://localhost:5173/criterion.html?id=renewable-energy-generation&city=hunter-valley",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Remove, not needed",
+      "target": {
+        "selector": "p.refNote",
+        "tag": "p",
+        "elementId": "",
+        "classes": "refNote",
+        "text": "Sources cited in the report for this indicator.",
+        "html": "<p class=\"refNote\">Sources cited in the report for this indicator.</p>",
+        "ancestors": "div.iPage › div.iMain › div.pane › div.iRefs",
+        "rect": {
+          "x": 760.33,
+          "y": 1282.6,
+          "w": 676,
+          "h": 20
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "12.5px",
+          "font-weight": "400",
+          "line-height": "20px",
+          "color": "rgb(125, 143, 154)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "0px",
+          "margin": "0px 0px 14px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 2560,
+        "h": 1271,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmtbqcizh9",
+      "seq": 9,
+      "createdAt": "2026-08-27T16:21:20.285Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "criterion.html?id=renewable-energy-generation&city=hunter-valley",
+      "url": "http://localhost:5173/criterion.html?id=renewable-energy-generation&city=hunter-valley",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Bring this part down, too close to the line above. Apply changes to all the indicators pages",
+      "target": {
+        "selector": "aside.iAside",
+        "tag": "aside",
+        "elementId": "",
+        "classes": "iAside",
+        "text": "Score3DevelopingThemeEnabling InfrastructureGroupEnergy SystemRoundApril 2025Same indicator elsewherePort HedlandModerate deficiency2KwinanaModerate deficiency2GladstoneDeveloping3",
+        "html": "<aside class=\"iAside\"><div class=\"iAsideTitle\">Score</div><div class=\"iScoreBig\"><span class=\"sBox lg\" data-v=\"3\" aria-label=\"Score 3 of 5, Developing\">3</span><div class=\"iScoreWord\">Developing</div></div><div class=\"iFacts\"><div class=\"iFactRow\"><span class=\"iFactLabel\">Theme</span><span class=\"iFactValue\">Enabling Infrastructure</span></div><div class=\"iFactRow\"><span class=\"iFactLabel\">Group</span><span class=\"iFactValue\">Energy System</span></div><div class=\"iFactRow\"><span class=\"iFactLabel\">Round</span><span class=\"iFactValue\">April 2025</span></div></div><div class=\"iAsideTitle spaced\">Same indicator elsewhere</div><a class=\"xRow\" href=\"criterion.html?id=renewable-energy-generation&amp;city=port-hedland\"><span class=\"xName\">Port Hedland</span><span class=\"xWord\">Moderate deficiency</span><span class=\"sBox\" data-v=\"2\" aria-label=\"Score 2 of 5, Moderate deficiency\">2</span></a><a class=\"xRow\" href=\"criterion.html?id=renewable-energy-generation&amp;city=kwinana\"><span class=\"xName\">Kwinana</span><span class=\"xWord\">Moderate deficiency</span><span class=\"sBox\" data-v=\"2\" aria-label=\"Score 2 of 5, Moderate deficiency\">2</span></a><a class=\"xRow\" href=\"criterion.html?id=renewable",
+        "ancestors": "div.wrap › div › div.iPage",
+        "rect": {
+          "x": 1484.33,
+          "y": 281.31,
+          "w": 300,
+          "h": 396.23
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "0px 0px 0px 28px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 2560,
+        "h": 1271,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmtcf9da8a",
+      "seq": 10,
+      "createdAt": "2026-08-28T03:58:43.328Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "index.html",
+      "url": "http://localhost:5173/index.html",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Remove this. Doesn't add anything",
+      "target": {
+        "selector": "div.tile:nth-of-type(4)",
+        "tag": "div",
+        "elementId": "",
+        "classes": "tile",
+        "text": "44%assessed regions scored87 of 200 region–indicator pairs",
+        "html": "<div class=\"tile\"><div class=\"tileN\">44<sup>%</sup></div><div class=\"tileL\">assessed regions scored<br>87 of 200 region–indicator pairs</div></div>",
+        "ancestors": "div.wrap › div.hero › div.tiles",
+        "rect": {
+          "x": 887.33,
+          "y": 431.41,
+          "w": 256,
+          "h": 118.4
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "20px 22px 20px 0px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmtcfahi6b",
+      "seq": 11,
+      "createdAt": "2026-08-28T03:59:35.454Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "index.html",
+      "url": "http://localhost:5173/index.html",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Rename the section to “Regions Assessed”.\nShow only the four assessed regions (Kwinana, Port Hedland, Gladstone, Hunter Valley).\nMerge the remaining regions into a single entry/link like “Additional Regions Not Yet Assessed” that links to the full Regions page.",
+      "target": {
+        "selector": "div.band:nth-of-type(3)",
+        "tag": "div",
+        "elementId": "",
+        "classes": "band",
+        "text": "Regions Assessed regions carry a coverage strip showing how much of the round is scored. Select a region to read its indicators. GladstoneQLDAssessed · September 202520 of 50 indicators scoredHunter ValleyNSWAssessed · April 202519 of 50 indicators scoredKwinanaWAAssessed · August 202624 of 50 indic",
+        "html": "<div class=\"band\"> <div class=\"secHead\"> <h2>Regions</h2> <div class=\"secNote\">Assessed regions carry a coverage strip showing how much of the round is scored. Select a region to read its indicators.</div> </div> <div class=\"regions\" id=\"regions\"><a class=\"rCard\" data-status=\"published\" href=\"city.html?city=gladstone\"><div class=\"rTop\"><span class=\"rName\">Gladstone</span><span class=\"rState\">QLD</span></div><span class=\"chip\" data-s=\"published\">Assessed · September 2025</span><div class=\"dots\"><span class=\"dot\" data-v=\"3\"></span><span class=\"dot\" data-v=\"2\"></span><span class=\"dot\" data-v=\"2\"></span><span class=\"dot\" data-v=\"3\"></span><span class=\"dot\" data-v=\"2\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\" data-v=\"3\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span clas",
+        "ancestors": "div.wrap",
+        "rect": {
+          "x": 119.33,
+          "y": 586.47,
+          "w": 1024,
+          "h": 729.79
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "44px 0px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmtcfdm4jc",
+      "seq": 12,
+      "createdAt": "2026-08-28T04:02:01.411Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "index.html",
+      "url": "http://localhost:5173/index.html",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Rewrite Overview page copy to be more accessible / marketing-friendly\nAvoid assuming users know terms like “Critical Success Criteria” or “National Action Plan”.\nSuggested direction: language like “assessing Australia’s industrial regions on their progress towards clean industry”, then explain that the NAP assesses 16 regions against shared criteria.\n\nGO to our website to see how we are describing this work. at www.bae.org.au\n\nI have also pasted our 2 pager that we used for the London Climate Action week to brief an international audience on this work. This is the most current way we are describing this work. Don't copy it work for word, but use it for inspiration and apply it for this work.",
+      "target": {
+        "selector": "div.hero:nth-of-type(2)",
+        "tag": "div",
+        "elementId": "",
+        "classes": "hero",
+        "text": "Beyond Zero Emissions Assessing Australia's industrial regions against the Critical Success Criteria The National Action Plan assesses each region against a shared set of indicators across five themes, scoring every one from 1 to 5 against its own grading scale. Each score is backed by published evi",
+        "html": "<div class=\"hero\"> <div class=\"eyebrow\">Beyond Zero Emissions</div> <h1>Assessing Australia's industrial regions against the Critical Success Criteria</h1> <p class=\"lede\">The National Action Plan assesses each region against a shared set of indicators across five themes, scoring every one from 1 to 5 against its own grading scale. Each score is backed by published evidence.</p> <div class=\"tiles\" id=\"tiles\"><div class=\"tile\"><div class=\"tileN\">16</div><div class=\"tileL\">regions in scope</div></div><div class=\"tile\"><div class=\"tileN\">4</div><div class=\"tileL\">with an assessment</div></div><div class=\"tile\"><div class=\"tileN\">50</div><div class=\"tileL\">indicators per region</div></div><div class=\"tile\"><div class=\"tileN\">44<sup>%</sup></div><div class=\"tileL\">assessed regions scored<br>87 of 200 region–indicator pairs</div></div></div> </div>",
+        "ancestors": "div.wrap",
+        "rect": {
+          "x": 119.33,
+          "y": 62.67,
+          "w": 1024,
+          "h": 523.8
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "52px 0px 36px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmtcff8ebd",
+      "seq": 13,
+      "createdAt": "2026-08-28T04:03:16.931Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "contributors.html",
+      "url": "http://localhost:5173/contributors.html",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Remove (not just “comment out” in a public repo) individual names to avoid consent issues.\nReplace with placeholder acknowledgement text referencing the National Action Plan + invitation to participate.\n\nLook at the acknowledge pages of the Hunter and Gladstone Regional Assessment Reports to check for wording.",
+      "target": {
+        "selector": "div.detailCard:nth-of-type(3)",
+        "tag": "div",
+        "elementId": "",
+        "classes": "detailCard",
+        "text": "Contributors Contributors BZE gratefully acknowledges the individuals and organisations who contributed to the National Action Plan and our Regional Assessments. This list is always growing — reach out if you would like to participate! Dr Jessica Allen| Tim Askew| Tim Buckley| Dr Amanda Cahill| Kim ",
+        "html": "<div class=\"detailCard\"> <div class=\"note\">Contributors</div> <h2 class=\"detailTitle\">Contributors</h2> <p class=\"sectionText\" style=\"margin-top:14px;\"> BZE gratefully acknowledges the individuals and organisations who contributed to the National Action Plan and our Regional Assessments. This list is always growing — reach out if you would like to participate! </p> <div class=\"contributorsInline\" aria-label=\"Contributors list\"> <span class=\"name\">Dr Jessica Allen</span><span class=\"sep\">|</span> <span class=\"name\">Tim Askew</span><span class=\"sep\">|</span> <span class=\"name\">Tim Buckley</span><span class=\"sep\">|</span> <span class=\"name\">Dr Amanda Cahill</span><span class=\"sep\">|</span> <span class=\"name\">Kim Carland</span><span class=\"sep\">|</span> <span class=\"name\">Brian Craighead</span><span class=\"sep\">|</span> <span class=\"name\">Queensland Conservation Council</span><span class=\"sep\">|</span> <span class=\"name\">Rosie King</span><span class=\"sep\">|</span> <span class=\"name\">Meredith England</span><span class=\"sep\">|</span> <span class=\"name\">Tony Goodfellow</span><span class=\"sep\">|</span> <span class=\"name\">Rosie King</span><span class=\"sep\">|</span> <span class=\"name\">Prof P",
+        "ancestors": "div.container",
+        "rect": {
+          "x": 127,
+          "y": 127.46,
+          "w": 1024,
+          "h": 600.22
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgb(255, 255, 255)",
+          "border-radius": "16px",
+          "padding": "26px 28px",
+          "margin": "24px 0px 0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmtcfh0zce",
+      "seq": 14,
+      "createdAt": "2026-08-28T04:04:40.632Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "index.html",
+      "url": "http://localhost:5173/index.html",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Remove this instead",
+      "target": {
+        "selector": "div.band:nth-of-type(4)",
+        "tag": "div",
+        "elementId": "",
+        "classes": "band",
+        "text": "Explore Industrial locations The 16 regions on the map, with the score of each assessed region. Critical Success Criteria The full criteria library — five themes, the groups within them and every indicator. Contributors The people and organisations behind the assessments.",
+        "html": "<div class=\"band\"> <div class=\"secHead\"> <h2>Explore</h2> </div> <div class=\"actionGrid\"> <a class=\"actionCard\" href=\"map.html\"> <div class=\"actionTitle\">Industrial locations</div> <div class=\"actionDesc\">The 16 regions on the map, with the score of each assessed region.</div> </a> <a class=\"actionCard\" href=\"CSC.html\"> <div class=\"actionTitle\">Critical Success Criteria</div> <div class=\"actionDesc\">The full criteria library — five themes, the groups within them and every indicator.</div> </a> <a class=\"actionCard\" href=\"contributors.html\"> <div class=\"actionTitle\">Contributors</div> <div class=\"actionDesc\">The people and organisations behind the assessments.</div> </a> </div> </div>",
+        "ancestors": "div.wrap",
+        "rect": {
+          "x": 119.33,
+          "y": 1316.26,
+          "w": 1024,
+          "h": 250.2
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "40px 0px 44px",
+          "margin": "0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 1278,
+        "h": 1270,
+        "dpr": 1.5
+      }
+    },
+    {
+      "id": "cmtcfjb67f",
+      "seq": 15,
+      "createdAt": "2026-08-28T04:06:27.151Z",
+      "status": "done",
+      "reviewer": "",
+      "page": "criterion.html?id=renewable-energy-generation&city=gladstone",
+      "url": "http://localhost:5173/criterion.html?id=renewable-energy-generation&city=gladstone",
+      "category": "layout",
+      "priority": "normal",
+      "comment": "Add some space after the references, the last line is too close to the edge and make it hard to read. This is an issue for all the indicator pages currently.",
+      "target": {
+        "selector": "div.iRefs:nth-of-type(2)",
+        "tag": "div",
+        "elementId": "",
+        "classes": "iRefs",
+        "text": "ReferencesOpen Electricity. (2025, October 1). Open Electricity: Queensland. openelectricity.org.auAustralian Energy Market Operator (AEMO). (2024). 2024 ISP - Green Energy Exports—Core, 2024 ISP generation and storage outlook [Excel Spreadsheet]. aemo.com.auMatthews, A. (2025, June 30). Not all ren",
+        "html": "<div class=\"iRefs\"><div class=\"iSubHead\">References</div><ol class=\"refList\"><li class=\"refItem\" id=\"ref-1\">Open Electricity. (2025, October 1). Open Electricity: Queensland. <a class=\"refLink\" href=\"https://openelectricity.org.au\" target=\"_blank\" rel=\"noopener\" title=\"https://openelectricity.org.au\">openelectricity.org.au</a></li><li class=\"refItem\" id=\"ref-2\">Australian Energy Market Operator (AEMO). (2024). 2024 ISP - Green Energy Exports—Core, 2024 ISP generation and storage outlook [Excel Spreadsheet]. <a class=\"refLink\" href=\"https://aemo.com.au/-/media/files/major-publications/isp/2024/supporting-materials/2024-isp-generation-and-storage-outlook.zip?la=en\" target=\"_blank\" rel=\"noopener\" title=\"https://aemo.com.au/-/media/files/major-publications/isp/2024/supporting-materials/2024-isp-generation-and-storage-outlook.zip?la=en\">aemo.com.au</a></li><li class=\"refItem\" id=\"ref-3\">Matthews, A. (2025, June 30). Not all renewable projects are created equal: Why approval times vary dramatically across Australia. RenewMap. <a class=\"refLink\" href=\"https://renewmap.com.au/blog/approval-times-across-australia/\" target=\"_blank\" rel=\"noopener\" title=\"https://renewmap.com.au/blog/approval-",
+        "ancestors": "div › div.iPage › div.iMain › div.pane",
+        "rect": {
+          "x": 760.33,
+          "y": 1692.19,
+          "w": 676,
+          "h": 379.76
+        },
+        "styleHints": {
+          "display": "block",
+          "font-size": "16px",
+          "font-weight": "400",
+          "line-height": "25.6px",
+          "color": "rgb(16, 34, 46)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "padding": "20px 0px 0px",
+          "margin": "30px 0px 0px",
+          "text-align": "start"
+        }
+      },
+      "viewport": {
+        "w": 2560,
+        "h": 1271,
+        "dpr": 1.5
+      }
+    }
+  ],
+  "updatedAt": "2026-08-28T04:06:27.152Z",
+  "archivedAt": "2026-08-28T05:21:17.912Z"
+}

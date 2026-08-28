@@ -1598,6 +1598,52 @@ html[data-ramp="traffic"] {
   box-shadow: none;
 }
 
+/* On a phone the sixteen name pills do not fit. At 390px they overlap each
+   other and cover the map underneath, which is what the pins are there to
+   point at. So below tablet width the four assessed regions keep their name
+   in a smaller pill and the other twelve become dots. Nothing changes in the
+   markup — the region name stays in the link, so the title attribute and
+   what a screen reader announces are unaffected. */
+
+@media (max-width: 700px) {
+  .cityLabel {
+    font-size: 10.5px;
+    padding: 3px 7px;
+    gap: 4px;
+    box-shadow: 0 2px 8px rgba(16, 34, 46, .16);
+  }
+
+  .cityLabel[data-status="none"] {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    font-size: 0;
+    overflow: hidden;
+    border-style: solid;
+    border-color: var(--ink-3);
+    background: rgba(255, 255, 255, .96);
+    /* Four of the dots sit under the edge of a named pill. Above it they
+       stay visible and tappable; underneath they disappear entirely. */
+    z-index: 3;
+  }
+
+  /* The dot is 10px across, too small to hit with a thumb. This gives it a
+     26px touch target without making the mark itself any bigger. */
+  .cityLabel[data-status="none"]::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 999px;
+  }
+
+  /* There is no hover on a touch screen, and the scale-up only pushed the
+     remaining pills into each other. */
+  .cityLabel:hover {
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 8px rgba(16, 34, 46, .16);
+  }
+}
+
 /* ---------------------------------------------------------
    15. Home page (legacy classes, restyled)
    --------------------------------------------------------- */
