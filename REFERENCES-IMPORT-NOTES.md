@@ -15,12 +15,20 @@ file and it is byte-for-byte the file that was signed off.
 
 ## What landed
 
-| | Hunter Valley | Gladstone |
-| --- | --- | --- |
-| Indicators | 19 | 20 |
-| Markers in the evidence text | 95 | 114 |
-| Source entries | 99 | 136 |
-| Report citations with no home | 0 | 18 |
+Port Hedland followed in September 2026, from the newer report supplied then.
+That report works differently: it cites author-date in the prose and prints a
+reference list under each indicator, rather than numbered endnotes at the back.
+The site treats both the same way — a marker where the citation sat, a numbered
+list per indicator — so `report:` on a Port Hedland entry is a position in that
+indicator's own list, not a whole-of-report endnote number.
+
+
+| | Hunter Valley | Gladstone | Port Hedland |
+| --- | --- | --- | --- |
+| Indicators with references | 19 | 20 | 19 of 24 |
+| Markers in the evidence text | 95 | 114 | 178 |
+| Source entries | 99 | 136 | 183 |
+| Report citations with no home | 0 | 18 | 52 |
 
 Numbering restarts at 1 for each indicator, in the order a reader meets the
 markers. Where the report cites the same source twice in one indicator, both
@@ -53,6 +61,22 @@ are Gladstone.
 Either the evidence text is missing material the report carries, or the report
 cites more than the assessment relies on. That is a content call for the team,
 not something to resolve in the data.
+
+## Port Hedland: five indicators left out on purpose
+
+`references-port-hedland.js` covers 19 of the region's 24 indicators. Federal
+skills and training, approvals, investment framework, research and development,
+and procurement are excluded. Their evidence text is Kwinana's — cloned into
+the Port Hedland region in an earlier round and never localised — so the new
+report's Port Hedland sources have nothing correct to attach to. Citing them
+against sentences about Alcoa's Kwinana refinery would make a wrong claim look
+sourced. The five will take references once their text is rewritten from the
+report; `PORT-HEDLAND-DRAFT-ISSUES.md` says what that involves.
+
+Of Port Hedland's 52 unplaced citations, 33 are in industry decarbonisation
+plans, where the site carries none of the report's three tables, and 8 are in
+federal emissions, on a Fuel Tax Credit paragraph the site does not have. The
+rest sit on the five excluded indicators.
 
 ## Things noticed in the reports along the way
 

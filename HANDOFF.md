@@ -132,6 +132,32 @@ citations that had no home in the evidence text, and a list of typos and
 duplicated passages noticed in both reports along the way. Nothing there was
 "fixed" in the published text.
 
+### September 2026 — Port Hedland checked against the new report
+
+The newer *Port Hedland Regional Readiness Report* was checked against the
+site, indicator by indicator. **All 24 scores match and no grading scale has
+changed.** Sixteen indicators carry the report's text as published and now have
+citation markers and a reference list; eight need a content decision.
+
+Five of those eight are the Kwinana clones `PORT-HEDLAND-DRAFT-ISSUES.md` has
+recorded since the first import — federal skills and training, approvals,
+investment framework, R&D and procurement. The new report localises all five
+for Port Hedland, which is the fix; the site has not been changed. They are
+deliberately absent from `references-port-hedland.js`, because attaching Port
+Hedland sources to sentences about Alcoa's Kwinana refinery would make a wrong
+claim look sourced.
+
+The other three are industry decarbonisation plans (the site carries none of
+the report's three tables, and the report contradicts itself on whether most
+companies have plans), federal emissions reduction (a substantial new Fuel Tax
+Credit paragraph) and effective community engagement (a new quotation, and one
+paragraph whose reasoning is reversed). `PORT-HEDLAND-DRAFT-ISSUES.md` was
+rewritten as the full comparison and is the place to start.
+
+That file also lists what is wrong in the report itself — nine unresolved
+`(ref)` placeholders, three citations with no matching reference entry, and a
+run of author and year mismatches — none of which were fixed here.
+
 All seven comments in `review/comments.json` are marked `done` and the file is
 waiting on my **Clear** in the overlay, which is the reviewer's call.
 
@@ -217,6 +243,19 @@ indicator ids.
 17. **Kwinana and Port Hedland have no references yet.** Their reports were not
     part of this round. Both halves have to move together when they are:
     markers in the evidence text and a matching `references-<region>.js`.
+
+18. **Port Hedland's text is a round behind.** Sixteen indicators match the new
+    report; eight do not, five of them still carrying Kwinana's words. Updating
+    them is a content job with your judgement in it — two of the differences are
+    outright factual conflicts (the WA approval bilateral, and why the Capacity
+    Investment Scheme does not reach the Pilbara), where the site and the report
+    cannot both be right.
+19. **The report's tables have nowhere to live.** Industry decarbonisation
+    plans is built around three company-by-company tables the site does not
+    carry, which is most of Port Hedland's 52 unplaced citations. The site can
+    render a table inside an evidence paragraph — the Hunter transmission entry
+    does — so this is a decision about whether they belong, not a technical
+    limit.
 
 ## Decisions already taken
 

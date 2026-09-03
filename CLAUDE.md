@@ -85,9 +85,11 @@ page. It loads only `data.js`, `learn-data.js`, `indicator-icons.js` and
 
 ## Citations and references
 
-The reports cite their sources with numbered endnotes. Those citations were
-carried into the site in August 2026 for the two published regions, Hunter
-Valley and Gladstone, in two halves:
+The reports cite their sources — the Hunter and Gladstone reports with numbered
+endnotes, the Port Hedland report with author-date in the prose and a list per
+indicator. Those citations were carried into the site for Hunter Valley and
+Gladstone in August 2026, and for Port Hedland in September 2026, in two
+halves:
 
 - **In the evidence text** — a marker per citation, written as
   `<sup class="refMark">1,2</sup>` at the point the report put it. Nothing
@@ -98,7 +100,9 @@ Valley and Gladstone, in two halves:
   each indicator, in the order a reader meets them, so a marker's number is
   a position in that indicator's list and nothing more. `report` on each
   entry keeps the number the printed report used, for tracing an entry back
-  to the PDF; it is data only and is never shown.
+  to the PDF; it is data only and is never shown. For Port Hedland, `report`
+  is the entry's position in that indicator's own printed list, since the
+  report has no single numbered sequence.
 
 `criterion.html` renders the list under the assessment on the Evidence tab
 and turns each marker into a jump link. It does not use the URL hash for
@@ -107,9 +111,12 @@ under the latest round only; an older round keeps its markers unresolved
 rather than borrowing a newer list. A region with no `references-` file
 draws exactly as before.
 
-Kwinana and Port Hedland have no reference file yet, so both pages probe for
-one and get a 404 in the console — the same optional-file pattern as the
-region photo slot, and not a fault to chase.
+Kwinana has no reference file yet, so its pages probe for one and get a 404 in
+the console — the same optional-file pattern as the region photo slot, and not
+a fault to chase. Port Hedland has a file, but it covers 19 of its 24
+indicators; the five federal-policy indicators whose evidence text is still
+Kwinana's are left out deliberately, and their pages simply render no
+References block.
 
 When a new region's report is brought in, both halves have to move together.
 A marker whose number has no entry is left as plain text rather than linked,
